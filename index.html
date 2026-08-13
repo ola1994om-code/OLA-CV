@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>مولد OLA للسيرة الذاتية العالمي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!-- مكتبة html2pdf لاستخراج PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- مكتبة FontAwesome للأيقونات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #0a2e6d;
+    --secondary: #d4af37;
+    --bg: #f3f4f6;
+    --panel-bg: #ffffff;
+    --text: #1e293b;
+    --light-text: #64748b;
+    --line: #e2e8f0;
+    --a4-w: 794px; 
+    --a4-h: 1123px;
+    --card-w: 321px;
+    --card-h: 208px;
+  }
+  
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; flex-direction: row;}
+  
+  /* ================= شريط الإدخال ================= */
+  .sidebar { width: 420px; background: var(--bg); height: 100vh; overflow-y: auto; padding: 20px; box-shadow: inset 5px 0 15px rgba(0,0,0,0.03); z-index: 10; display: flex; flex-direction: column; }
+  .sidebar::-webkit-scrollbar { width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  
+  .brand { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--line); }
+  .brand-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .brand h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 22px; }
+  .brand p { margin: 0; color: var(--light-text); font-size: 12px; font-weight: bold; }
+  
+  /* تصميم البطاقات لأقسام الإدخال */
+  .form-section { background: var(--panel-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin-bottom: 20px; border: 1px solid #f8fafc; }
+  .form-section-title { font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+  
+  /* بطاقات القوالب */
+  .tpl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+  .tpl-card { border: 2px solid var(--line); border-radius: 10px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .tpl-card i { font-size: 24px; margin-bottom: 8px; color: var(--light-text); transition: 0.2s;}
+  .tpl-name { font-size: 13px; font-weight: bold; color: var(--text); }
+  .tpl-lang { font-size: 11px; color: var(--light-text); margin-top: 4px; background: var(--bg); padding: 2px 8px; border-radius: 10px;}
+  .tpl-card:hover { border-color: #cbd5e1; transform: translateY(-2px); }
+  .tpl-card.active { border-color: var(--primary); background: #f4f7fc; box-shadow: 0 4px 10px rgba(10, 46, 109, 0.1); }
+  .tpl-card.active i { color: var(--primary); }
+  .tpl-card.active .tpl-lang { background: var(--primary); color: #fff; }
+
+  /* الحقول (Inputs) */
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 13px; color: #475569; }
+  .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: #f8fafc; color: var(--text); }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(10, 46, 109, 0.08); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  
+  .btn-add { background: #e0e7ff; color: #3730a3; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 10px;}
+  .btn-add:hover { background: #c7d2fe; }
+  .btn-remove { background: #fee2e2; color: #991b1b; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 10px; width: 100%; transition: 0.2s; font-weight:bold;}
+  .btn-remove:hover { background: #fca5a5; }
+  
+  .dynamic-item { background: #f8fafc; border: 1px solid var(--line); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+  
+  /* اختيار الألوان */
+  .theme-picker { display: flex; gap: 12px; margin-top: 10px; }
+  .color-btn { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;}
+  .color-btn.active { transform: scale(1.15); box-shadow: 0 0 0 2px var(--text); }
+
+  /* أزرار الإصدار والمشاركة */
+  .actions-card { background: var(--panel-bg); padding: 20px; border-radius: 12px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto; position: sticky; bottom: 0;}
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(10, 46, 109, 0.2);}
+  .btn-secondary { background: var(--secondary); color: #000; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+  .btn-secondary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);}
+  
+  .btn-share { grid-column: span 2; background: #10b981; color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+  .btn-share:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
+
+  /* ================= مساحة المعاينة ================= */
+  .preview-area { flex: 1; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 30px; background: #cbd5e1; }
+  .preview-area::-webkit-scrollbar { width: 8px; }
+  .preview-area::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+  
+  .view-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #fff; padding: 8px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 5;}
+  .v-tab { padding: 10px 25px; border: none; background: transparent; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 14px; color: var(--light-text); transition: 0.2s;}
+  .v-tab.active { background: var(--primary); color: #fff; }
+
+  /* الغلاف المسؤول عن تصغير السيرة الذاتية للموبايل دون تشويهها */
+  .cv-scale-wrapper { display: flex; justify-content: center; align-items: flex-start; width: 100%; transform-origin: top center; transition: 0.3s; }
+  
+  /* ================= القوالب (Templates) ================= */
+  .cv-page { 
+      width: var(--a4-w) !important; height: var(--a4-h) !important; 
+      min-width: var(--a4-w) !important; min-height: var(--a4-h) !important; 
+      max-width: var(--a4-w) !important; max-height: var(--a4-h) !important; 
+      background: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+      overflow: hidden; display: none;
+  }
+  .cv-page.active-template { display: flex; }
+
+  /* المشتركات (العامة للـ CV) */
+  .timeline { position: relative; }
+  .timeline-item { position: relative; padding: 0 30px; margin-bottom: 25px; }
+  .timeline-item:last-child { margin-bottom: 0; }
+  .cv-page[dir="rtl"] .timeline-item::before { right: 0; }
+  .cv-page[dir="ltr"] .timeline-item::before { left: 0; }
+  .timeline-item::before { content: ''; position: absolute; top: 6px; width: 14px; height: 14px; background: var(--secondary); border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--secondary); z-index: 2; }
+  .cv-page[dir="rtl"] .timeline-item::after { right: 6px; }
+  .cv-page[dir="ltr"] .timeline-item::after { left: 6px; }
+  .timeline-item::after { content: ''; position: absolute; top: 20px; bottom: -25px; width: 2px; background: var(--line); z-index: 1; }
+  .timeline-item:last-child::after { display: none; }
+  .tl-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; gap: 5px;}
+  .tl-title { font-size: 17px; font-weight: bold; color: var(--text); margin: 0; }
+  .tl-date { font-size: 12px; font-weight: bold; color: var(--primary); background: #f1f5f9; padding: 4px 10px; border-radius: 20px; display: inline-block;}
+  .tl-subtitle { font-size: 14px; color: var(--secondary); font-weight: bold; margin-bottom: 8px; }
+  .tl-desc { font-size: 13px; line-height: 1.7; color: var(--light-text); margin: 0; }
+
+  /* شعار داخل السيرة الذاتية */
+  .cv-top-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .cv-top-brand img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+  .cv-top-brand span { font-size: 12px; font-weight: bold; color: var(--light-text); letter-spacing: 1px; }
+
+  /* ---------------- القالب 1: الرسمي عربي ---------------- */
+  #template-1 { flex-direction: row; direction: rtl; }
+  #template-1 .t1-sidebar { width: 35%; background: var(--primary); color: #ffffff; padding: 40px 30px; display: flex; flex-direction: column; }
+  #template-1 .t1-main { width: 65%; background: #ffffff; padding: 50px 40px; color: var(--text); }
+  .t1-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.2); margin: 0 auto 30px auto; display: block;}
+  .t1-side-title { font-size: 18px; font-weight: bold; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; margin-bottom: 20px; color: #fff; text-transform: uppercase;}
+  .t1-contact { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
+  .t1-contact-item { display: flex; align-items: center; gap: 12px; font-size: 13px; word-break: break-all; }
+  .t1-contact-item i { width: 25px; height: 25px; background: var(--secondary); color: var(--primary); display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 12px; flex-shrink: 0;}
+  .t1-side-list { list-style: none; padding: 0; margin: 0 0 40px 0; }
+  .t1-side-list li { position: relative; padding: 0 18px; margin-bottom: 12px; font-size: 14px; line-height: 1.5; }
+  #template-1 .t1-side-list li::before { right: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 10px; top: 3px; }
+  .t1-name { font-size: 38px; font-weight: 800; color: var(--primary); margin: 0 0 8px 0; line-height: 1.1; }
+  .t1-title { font-size: 18px; font-weight: 600; color: var(--secondary); margin: 0 0 35px 0; }
+  .t1-section { margin-bottom: 35px; }
+  .t1-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid var(--line); padding-bottom: 10px; }
+  .t1-section-header i { color: var(--secondary); font-size: 22px; }
+  .t1-section-header h3 { margin: 0; font-size: 22px; color: var(--primary); font-weight: bold; }
+  .t1-summary { font-size: 14px; line-height: 1.8; color: var(--light-text); text-align: justify; }
+
+  /* ---------------- القالب 2: العصري عربي ---------------- */
+  #template-2 { flex-direction: column; direction: rtl; }
+  .t2-header { background: var(--primary); padding: 40px 50px; display: flex; align-items: center; gap: 40px; color: #fff; }
+  .t2-photo { width: 140px; height: 140px; border-radius: 12px; object-fit: cover; border: 3px solid var(--secondary); background: #fff;}
+  .t2-header-info { flex: 1; }
+  .t2-name { font-size: 42px; font-weight: 900; margin: 0 0 5px 0; color: #fff; }
+  .t2-title { font-size: 20px; color: var(--secondary); margin: 0 0 20px 0; font-weight: 600;}
+  .t2-contact-row { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; }
+  .t2-contact-row div { display: flex; align-items: center; gap: 8px; }
+  .t2-contact-row i { color: var(--secondary); font-size: 16px; }
+  .t2-body { display: flex; flex: 1; }
+  #template-2 .t2-main { width: 65%; padding: 40px 50px 40px 30px; }
+  #template-2 .t2-sidebar { width: 35%; padding: 40px 30px 40px 50px; background: #f8fafc; border-right: 1px solid var(--line); }
+  .t2-section-title { font-size: 20px; color: var(--primary); border-bottom: 3px solid var(--secondary); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; font-weight: bold; }
+  .t2-summary { font-size: 14px; line-height: 1.8; color: var(--text); margin-bottom: 35px; text-align: justify;}
+  .t2-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .t2-tags span { background: var(--primary); color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 13px; }
+
+  /* ---------------- القالب 3: إنجليزي Pro (LTR) ---------------- */
+  #template-3 { flex-direction: row; direction: ltr; } 
+  #template-3 .t1-sidebar { width: 35%; background: var(--primary); color: #ffffff; padding: 40px 30px; display: flex; flex-direction: column; }
+  #template-3 .t1-main { width: 65%; background: #ffffff; padding: 50px 40px; color: var(--text); }
+  #template-3 .t1-side-list li::before { left: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 10px; top: 3px; }
+  
+  /* ---------------- القالب 4: إنجليزي Creative (LTR) ---------------- */
+  #template-4 { flex-direction: column; direction: ltr; }
+  #template-4 .t2-main { width: 65%; padding: 40px 30px 40px 50px; }
+  #template-4 .t2-sidebar { width: 35%; padding: 40px 50px 40px 30px; background: #f8fafc; border-left: 1px solid var(--line); }
+
+  /* ---------------- القالب 5: فرنسي Elegant (LTR) ---------------- */
+  #template-5 { flex-direction: column; padding: 50px; background: #fff; direction: ltr;}
+  .t5-header { text-align: center; border-bottom: 1px solid var(--line); padding-bottom: 30px; margin-bottom: 30px; }
+  .t5-photo { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin: 0 auto 15px auto; padding: 4px;}
+  .t5-name { font-size: 40px; font-weight: 300; color: var(--text); margin: 0 0 10px 0; letter-spacing: 1px;}
+  .t5-title { font-size: 18px; color: var(--primary); margin: 0 0 20px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;}
+  .t5-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; font-size: 13px; color: var(--light-text); }
+  .t5-contact i { color: var(--secondary); margin-right: 5px; }
+  .t5-body { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .t5-section-title { font-size: 20px; color: var(--primary); text-align: center; margin-bottom: 25px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
+  .t5-section-title::before, .t5-section-title::after { content: ''; height: 1px; background: var(--line); flex: 1; }
+  .t5-section-title i { color: var(--secondary); }
+  .t5-summary { font-size: 14px; line-height: 1.8; color: var(--light-text); text-align: center; margin-bottom: 40px; padding: 0 20px;}
+  .t5-list { list-style: none; padding: 0; margin: 0; }
+  .t5-list li { margin-bottom: 10px; font-size: 14px; border-left: 3px solid var(--secondary); padding-left: 15px; background: #f8fafc; padding: 10px 15px; }
+
+  /* ================= تصميم بطاقة العمل ================= */
+  .business-card-container { display: none; flex-direction: column; gap: 20px; align-items: center; }
+  .b-card { width: var(--card-w) !important; height: var(--card-h) !important; min-width: var(--card-w) !important; min-height: var(--card-h) !important; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; position: relative; display: flex; direction: rtl;}
+  .b-card-front { background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%); color: #fff; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; width: 100%;}
+  .b-card-back { background: #fff; display: flex; width: 100%;}
+  .bc-right { width: 35%; background: var(--primary); display: flex; justify-content: center; align-items: center; }
+  .bc-left { width: 65%; padding: 20px 15px; display: flex; flex-direction: column; justify-content: center; }
+  .bc-name { font-size: 20px; font-weight: bold; color: var(--primary); margin: 0 0 2px 0; }
+  .bc-title { font-size: 11px; color: var(--secondary); margin: 0 0 15px 0; font-weight: bold; }
+  .bc-contact { font-size: 10px; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .bc-contact i { color: var(--primary); width: 14px; text-align: center; }
+  .bc-qr { width: 60px; height: 60px; background: #fff; padding: 2px; border-radius: 4px; }
+  
+  /* شريط التنقل السفلي للموبايل (مخفي على الكمبيوتر) */
+  .mobile-nav { display: none; }
+
+  /* ================= استجابة الموبايل (Responsive Mobile) ================= */
+  @media (max-width: 900px) {
+    body { flex-direction: column; }
+    .sidebar { width: 100%; height: 100vh; padding-bottom: 90px; }
+    .preview-area { width: 100%; height: 100vh; position: fixed; top: 0; left: 0; padding: 15px; padding-top: 20px; padding-bottom: 90px; z-index: 20; display: none; }
+    
+    .cv-scale-wrapper { transform: scale(0.42); height: 480px; }
+    .business-card-container { transform: scale(0.85); transform-origin: top center; }
+    
+    .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 100; border-top: 1px solid var(--line);}
+    .mobile-nav button { flex: 1; padding: 15px 10px; font-size: 14px; font-weight: bold; border: none; background: transparent; color: var(--light-text); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s;}
+    .mobile-nav button i { font-size: 20px; }
+    .mobile-nav button.active { color: var(--primary); background: #f8fafc; border-top: 3px solid var(--primary); }
+
+    .m-hide { display: none !important; }
+    .m-show { display: flex !important; }
+    
+    .actions-card { border-radius: 0; margin: 0 -20px; padding: 15px 20px;}
+  }
+
+  /* ================= إعدادات الطباعة للكمبيوتر (A4) ================= */
+  @media print {
+    @page { size: A4 portrait; margin: 0; }
+    body { margin: 0; padding: 0; background: #fff; }
+    .sidebar, .view-tabs, .actions-card, .mobile-nav { display: none !important; }
+    .preview-area { padding: 0; background: none; overflow: visible; height: auto; display: block; position: static; }
+    .cv-scale-wrapper { transform: scale(1) !important; height: auto !important; width: 100%; }
+    .cv-page { box-shadow: none !important; width: 210mm !important; height: 297mm !important; margin: 0; page-break-after: avoid; }
+    .business-card-container { transform: scale(1) !important; page-break-inside: avoid; margin-bottom: 20px;}
+    .b-card { box-shadow: none; border: 1px solid #ccc; }
+    .print-hide { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- شريط الإدخال (البيانات) -->
+<div class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" class="brand-logo" alt="Logo">
+    <h1>OLA CV Builder</h1>
+    <p>أداة احترافية لإصدار السير الذاتية والبطاقات</p>
+  </div>
+  
+  <!-- قسم القوالب كبطاقات بصرية -->
+  <div class="form-section">
+    <div class="form-section-title"><i class="fas fa-layer-group"></i> اختيار القالب واللغة</div>
+    <div class="tpl-grid">
+      <div class="tpl-card active" id="tpl-btn-1" onclick="changeTemplate(1, 'ar')">
+        <i class="fas fa-file-invoice"></i><div class="tpl-name">الرسمي</div><div class="tpl-lang">عربي</div>
+      </div>
+      <div class="tpl-card" id="tpl-btn-2" onclick="changeTemplate(2, 'ar')">
+        <i class="fas fa-id-card"></i><div class="tpl-name">العصري</div><div class="tpl-lang">عربي</div>
+      </div>
+      <div class="tpl-card" id="tpl-btn-3" onclick="changeTemplate(3, 'en')">
+        <i class="fas fa-file-alt"></i><div class="tpl-name">Professional</div><div class="tpl-lang">English</div>
+      </div>
+      <div class="tpl-card" id="tpl-btn-4" onclick="changeTemplate(4, 'en')">
+        <i class="fas fa-columns"></i><div class="tpl-name">Creative</div><div class="tpl-lang">English</div>
+      </div>
+      <div class="tpl-card" id="tpl-btn-5" onclick="changeTemplate(5, 'fr')">
+        <i class="fas fa-file-signature"></i><div class="tpl-name">Éلégant</div><div class="tpl-lang">Français</div>
+      </div>
+    </div>
+    
+    <div class="form-section-title" style="margin-top:20px;"><i class="fas fa-palette"></i> لون الثيم الأساسي</div>
+    <div class="theme-picker">
+      <div class="color-btn active" style="background: #0a2e6d;" onclick="setTheme('#0a2e6d', '#d4af37', this)"></div>
+      <div class="color-btn" style="background: #0f766e;" onclick="setTheme('#0f766e', '#fde047', this)"></div>
+      <div class="color-btn" style="background: #be123c;" onclick="setTheme('#be123c', '#fca5a5', this)"></div>
+      <div class="color-btn" style="background: #1e293b;" onclick="setTheme('#1e293b', '#94a3b8', this)"></div>
+    </div>
+  </div>
+
+  <!-- قسم المعلومات الشخصية -->
+  <div class="form-section">
+    <div class="form-section-title"><i class="fas fa-user"></i> المعلومات الشخصية</div>
+    <div class="form-group">
+      <label>الصورة الشخصية</label>
+      <input type="file" id="in-photo" accept="image/*">
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>الاسم الكامل</label>
+        <input type="text" id="in-name" value="أبو حسام" oninput="updateCV()">
+      </div>
+      <div class="form-group">
+        <label>المسمى الوظيفي</label>
+        <input type="text" id="in-title" value="مطور برمجيات ومقدم خدمات رقمية" oninput="updateCV()">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>رقم الهاتف</label>
+        <input type="text" id="in-phone" value="70503468" dir="ltr" style="text-align:right;" oninput="updateCV()">
+      </div>
+      <div class="form-group">
+        <label>البريد الإلكتروني</label>
+        <input type="text" id="in-email" value="ola1994om@gmail.com" dir="ltr" style="text-align:right;" oninput="updateCV()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>العنوان / الموقع</label>
+      <input type="text" id="in-address" value="لبنان" oninput="updateCV()">
+    </div>
+    <div class="form-group">
+      <label>نبذة تعريفية (Profile)</label>
+      <textarea id="in-summary" oninput="updateCV()">أعمل في مجال تطوير البرمجيات وتقديم الخدمات الرقمية الشاملة. مؤسس شبكة OLA الإعلانية والأنظمة التابعة لها، ولدي خبرة واسعة في بناء وتطوير المنصات وقواعد البيانات وتطبيقات الهواتف وإدارتها باحترافية.</textarea>
+    </div>
+  </div>
+
+  <!-- قسم الخبرات -->
+  <div class="form-section">
+    <div class="form-section-title"><i class="fas fa-briefcase"></i> الخبرات العملية</div>
+    <div id="exp-container"></div>
+    <button class="btn-add" onclick="addExp()"><i class="fas fa-plus"></i> إضافة خبرة جديدة</button>
+  </div>
+
+  <!-- قسم التعليم -->
+  <div class="form-section">
+    <div class="form-section-title"><i class="fas fa-graduation-cap"></i> التعليم الأكاديمي</div>
+    <div id="edu-container"></div>
+    <button class="btn-add" onclick="addEdu()"><i class="fas fa-plus"></i> إضافة تعليم جديد</button>
+  </div>
+
+  <!-- قسم المهارات واللغات -->
+  <div class="form-section">
+    <div class="form-section-title"><i class="fas fa-star"></i> المهارات واللغات (افصل بفاصلة ،)</div>
+    <div class="form-group">
+      <label>المهارات</label>
+      <textarea id="in-skills" oninput="updateCV()">تطوير الويب الشامل, قواعد البيانات (Supabase), إنشاء تطبيقات الموبايل, إدارة الشبكات الإعلانية</textarea>
+    </div>
+    <div class="form-group">
+      <label>اللغات</label>
+      <input type="text" id="in-langs" value="العربية (اللغة الأم), الإنجليزية (مستوى متقدم)" oninput="updateCV()">
+    </div>
+  </div>
+
+  <!-- أزرار الإصدار والمشاركة -->
+  <div class="actions-card print-hide">
+    <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> إصدار وطباعة (A4)</button>
+    <button class="btn-secondary" id="btn-export" onclick="exportPDF()"><i class="fas fa-download"></i> إصدار (PDF)</button>
+    <button class="btn-share" id="btn-share" onclick="sharePDF()"><i class="fas fa-share-nodes"></i> مشاركة 📤 (واتساب، إيميل...)</button>
+  </div>
+</div>
+
+<!-- مساحة المعاينة -->
+<div class="preview-area" id="preview-area">
+  
+  <div class="view-tabs print-hide">
+    <button class="v-tab active" onclick="switchView('cv', this)">السيرة الذاتية (CV)</button>
+    <button class="v-tab" onclick="switchView('card', this)">بطاقة العمل (Business Card)</button>
+  </div>
+
+  <!-- الغلاف الخاص بالتصغير للموبايل -->
+  <div class="cv-scale-wrapper" id="scale-wrapper">
+      
+      <!-- ================= القالب 1: الرسمي عربي ================= -->
+      <div class="cv-page active-template" id="template-1">
+        <div class="t1-sidebar">
+          <div class="cv-top-brand"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
+          <img class="out-photo t1-photo" src="">
+          <h3 class="t1-side-title lbl-contact">التواصل</h3>
+          <div class="t1-contact">
+            <div class="t1-contact-item"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+            <div class="t1-contact-item"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+            <div class="t1-contact-item"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+          </div>
+          <h3 class="t1-side-title lbl-skills">المهارات</h3>
+          <ul class="t1-side-list out-skills"></ul>
+          <h3 class="t1-side-title lbl-langs">اللغات</h3>
+          <ul class="t1-side-list out-langs"></ul>
+        </div>
+        <div class="t1-main">
+          <h1 class="t1-name out-name">الاسم</h1>
+          <h2 class="t1-title out-title">المسمى الوظيفي</h2>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-user-tie"></i><h3 class="lbl-profile">نبذة تعريفية</h3></div>
+            <div class="t1-summary out-summary"></div>
+          </div>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-briefcase"></i><h3 class="lbl-exp">الخبرات العملية</h3></div>
+            <div class="timeline out-exp"></div>
+          </div>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-graduation-cap"></i><h3 class="lbl-edu">التعليم الأكاديمي</h3></div>
+            <div class="timeline out-edu"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= القالب 2: العصري عربي ================= -->
+      <div class="cv-page" id="template-2">
+        <div class="t2-header">
+          <img class="out-photo t2-photo" src="">
+          <div class="t2-header-info">
+            <div class="cv-top-brand" style="border:none; margin:0 0 5px 0; padding:0;"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span style="color:#fde047">ABU HUSSAM</span></div>
+            <h1 class="t2-name out-name"></h1>
+            <h2 class="t2-title out-title"></h2>
+            <div class="t2-contact-row">
+              <div><i class="fas fa-phone"></i><span class="out-phone" dir="ltr"></span></div>
+              <div><i class="fas fa-envelope"></i><span class="out-email"></span></div>
+              <div><i class="fas fa-location-dot"></i><span class="out-address"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="t2-body">
+          <div class="t2-main">
+            <h3 class="t2-section-title lbl-profile">نبذة تعريفية</h3>
+            <div class="t2-summary out-summary"></div>
+            <h3 class="t2-section-title lbl-exp">الخبرات العملية</h3>
+            <div class="timeline out-exp" style="margin-bottom:35px;"></div>
+            <h3 class="t2-section-title lbl-edu">التعليم الأكاديمي</h3>
+            <div class="timeline out-edu"></div>
+          </div>
+          <div class="t2-sidebar">
+            <h3 class="t2-section-title lbl-skills">المهارات</h3>
+            <div class="t2-tags out-skills-tags" style="margin-bottom:40px;"></div>
+            <h3 class="t2-section-title lbl-langs">اللغات</h3>
+            <div class="t2-tags out-langs-tags"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= القالب 3: إنجليزي Pro (LTR) ================= -->
+      <div class="cv-page" id="template-3">
+        <div class="t1-sidebar">
+          <div class="cv-top-brand"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
+          <img class="out-photo t1-photo" src="">
+          <h3 class="t1-side-title lbl-contact">Contact</h3>
+          <div class="t1-contact">
+            <div class="t1-contact-item"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+            <div class="t1-contact-item"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+            <div class="t1-contact-item"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+          </div>
+          <h3 class="t1-side-title lbl-skills">Skills</h3>
+          <ul class="t1-side-list out-skills"></ul>
+          <h3 class="t1-side-title lbl-langs">Languages</h3>
+          <ul class="t1-side-list out-langs"></ul>
+        </div>
+        <div class="t1-main">
+          <h1 class="t1-name out-name">Name</h1>
+          <h2 class="t1-title out-title">Job Title</h2>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-user-tie"></i><h3 class="lbl-profile">Profile</h3></div>
+            <div class="t1-summary out-summary"></div>
+          </div>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-briefcase"></i><h3 class="lbl-exp">Experience</h3></div>
+            <div class="timeline out-exp"></div>
+          </div>
+          <div class="t1-section">
+            <div class="t1-section-header"><i class="fas fa-graduation-cap"></i><h3 class="lbl-edu">Education</h3></div>
+            <div class="timeline out-edu"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= القالب 4: إنجليزي Creative (LTR) ================= -->
+      <div class="cv-page" id="template-4">
+        <div class="t2-header">
+          <img class="out-photo t2-photo" src="">
+          <div class="t2-header-info">
+            <div class="cv-top-brand" style="border:none; margin:0 0 5px 0; padding:0;"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span style="color:#fde047">ABU HUSSAM</span></div>
+            <h1 class="t2-name out-name"></h1>
+            <h2 class="t2-title out-title"></h2>
+            <div class="t2-contact-row">
+              <div><i class="fas fa-phone"></i><span class="out-phone" dir="ltr"></span></div>
+              <div><i class="fas fa-envelope"></i><span class="out-email"></span></div>
+              <div><i class="fas fa-location-dot"></i><span class="out-address"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="t2-body">
+          <div class="t2-main">
+            <h3 class="t2-section-title lbl-profile">Profile</h3>
+            <div class="t2-summary out-summary"></div>
+            <h3 class="t2-section-title lbl-exp">Experience</h3>
+            <div class="timeline out-exp" style="margin-bottom:35px;"></div>
+            <h3 class="t2-section-title lbl-edu">Education</h3>
+            <div class="timeline out-edu"></div>
+          </div>
+          <div class="t2-sidebar">
+            <h3 class="t2-section-title lbl-skills">Skills</h3>
+            <div class="t2-tags out-skills-tags" style="margin-bottom:40px;"></div>
+            <h3 class="t2-section-title lbl-langs">Languages</h3>
+            <div class="t2-tags out-langs-tags"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= القالب 5: فرنسي Elegant (LTR) ================= -->
+      <div class="cv-page" id="template-5">
+        <div class="t5-header">
+          <div class="cv-top-brand" style="border:none; justify-content:center; margin-bottom:10px;"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
+          <img class="out-photo t5-photo" src="">
+          <h1 class="t5-name out-name"></h1>
+          <h2 class="t5-title out-title"></h2>
+          <div class="t5-contact">
+            <span><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></span>
+            <span><i class="fas fa-envelope"></i> <span class="out-email"></span></span>
+            <span><i class="fas fa-location-dot"></i> <span class="out-address"></span></span>
+          </div>
+        </div>
+        <div class="t5-summary out-summary"></div>
+        <div class="t5-body">
+          <div>
+            <h3 class="t5-section-title"><i class="fas fa-briefcase"></i><span class="lbl-exp">Expérience</span></h3>
+            <div class="timeline out-exp"></div>
+          </div>
+          <div>
+            <h3 class="t5-section-title"><i class="fas fa-graduation-cap"></i><span class="lbl-edu">Éducation</span></h3>
+            <div class="timeline out-edu" style="margin-bottom:40px;"></div>
+            
+            <h3 class="t5-section-title"><i class="fas fa-star"></i><span class="lbl-skills">Compétences</span></h3>
+            <ul class="t5-list out-skills"></ul>
+            
+            <h3 class="t5-section-title" style="margin-top:40px;"><i class="fas fa-language"></i><span class="lbl-langs">Langues</span></h3>
+            <ul class="t5-list out-langs"></ul>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+  <!-- حاوية بطاقة العمل -->
+  <div class="business-card-container print-hide" id="card-preview">
+    <div class="b-card">
+      <div class="b-card-front">
+        <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" style="width:35px; height:35px; border-radius:50%; object-fit:cover; margin-bottom:5px; border:1px solid #fff;">
+        <h2 style="margin:0 0 2px 0; font-size:24px; color:var(--secondary);">OLA</h2>
+        <div style="font-size:10px; letter-spacing:1px; opacity:0.9; margin-bottom:10px; text-transform: uppercase;">الخدمات الإلكترونية</div>
+        <h3 class="out-name" style="margin:0; font-size:16px;"></h3>
+      </div>
+    </div>
+    
+    <div class="b-card">
+      <div class="b-card-back">
+        <div class="bc-right">
+          <img id="card-qr" class="bc-qr" src="">
+        </div>
+        <div class="bc-left">
+          <div class="bc-name out-name"></div>
+          <div class="bc-title out-title"></div>
+          <div class="bc-contact"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+          <div class="bc-contact"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+          <div class="bc-contact"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- شريط التنقل السفلي الخاص بالموبايل فقط -->
+<div class="mobile-nav print-hide">
+  <button id="nav-form" class="active" onclick="toggleMobile('form')">
+    <i class="fas fa-edit"></i> تعديل البيانات
+  </button>
+  <button id="nav-preview" onclick="toggleMobile('preview')">
+    <i class="fas fa-eye"></i> معاينة السيرة
+  </button>
+</div>
+
+<script>
+/* قاموس الترجمة للعناوين */
+const dict = {
+  ar: { contact: "التواصل", skills: "المهارات", langs: "اللغات", profile: "نبذة تعريفية", exp: "الخبرات العملية", edu: "التعليم الأكاديمي" },
+  en: { contact: "Contact", skills: "Skills", langs: "Languages", profile: "Profile", exp: "Experience", edu: "Education" },
+  fr: { contact: "Contact", skills: "Compétences", langs: "Langues", profile: "Profil", exp: "Expérience", edu: "Éducation" }
+};
+let currentLang = 'ar';
+
+/* البيانات الافتراضية */
+let expData = [
+  { title: "مؤسس ومطور أنظمة OLA", subtitle: "أبو حسام للخدمات الإلكترونية", date: "2020 - الحاضر", desc: "بناء وتطوير شبكات إعلانية، مراكز حسابات، ومتاجر احترافية باستخدام أحدث التقنيات." }
+];
+let eduData = [
+  { title: "دبلوم في تقنية المعلومات", subtitle: "تطوير البرمجيات", date: "2015 - 2018", desc: "دراسة وتطبيق تقنيات برمجة الويب وتحليل قواعد البيانات." }
+];
+
+const setHtml = (selector, html) => document.querySelectorAll(selector).forEach(el => el.innerHTML = html);
+const setText = (selector, text) => document.querySelectorAll(selector).forEach(el => el.innerText = text);
+
+function renderExpInputs() {
+  const container = document.getElementById("exp-container");
+  container.innerHTML = "";
+  expData.forEach((exp, index) => {
+    container.innerHTML += `
+      <div class="dynamic-item">
+        <div class="form-group"><input type="text" placeholder="المسمى الوظيفي" value="${exp.title}" oninput="expData[${index}].title=this.value; updateCV()"></div>
+        <div class="form-group"><input type="text" placeholder="الشركة / المشروع" value="${exp.subtitle}" oninput="expData[${index}].subtitle=this.value; updateCV()"></div>
+        <div class="form-group"><input type="text" placeholder="التاريخ (مثال: 2020 - الحاضر)" value="${exp.date}" oninput="expData[${index}].date=this.value; updateCV()" dir="ltr"></div>
+        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف والمهام" oninput="expData[${index}].desc=this.value; updateCV()" style="height:60px;">${exp.desc}</textarea></div>
+        <button class="btn-remove" onclick="removeExp(${index})"><i class="fas fa-trash"></i> حذف هذه الخبرة</button>
+      </div>`;
+  });
+}
+function addExp() { expData.push({title:"", subtitle:"", date:"", desc:""}); renderExpInputs(); updateCV(); }
+function removeExp(index) { expData.splice(index, 1); renderExpInputs(); updateCV(); }
+
+function renderEduInputs() {
+  const container = document.getElementById("edu-container");
+  container.innerHTML = "";
+  eduData.forEach((edu, index) => {
+    container.innerHTML += `
+      <div class="dynamic-item">
+        <div class="form-group"><input type="text" placeholder="الدرجة العلمية" value="${edu.title}" oninput="eduData[${index}].title=this.value; updateCV()"></div>
+        <div class="form-group"><input type="text" placeholder="الجامعة / المعهد" value="${edu.subtitle}" oninput="eduData[${index}].subtitle=this.value; updateCV()"></div>
+        <div class="form-group"><input type="text" placeholder="التاريخ" value="${edu.date}" oninput="eduData[${index}].date=this.value; updateCV()" dir="ltr"></div>
+        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف" oninput="eduData[${index}].desc=this.value; updateCV()" style="height:60px;">${edu.desc}</textarea></div>
+        <button class="btn-remove" onclick="removeEdu(${index})"><i class="fas fa-trash"></i> حذف هذا التعليم</button>
+      </div>`;
+  });
+}
+function addEdu() { eduData.push({title:"", subtitle:"", date:"", desc:""}); renderEduInputs(); updateCV(); }
+function removeEdu(index) { eduData.splice(index, 1); renderEduInputs(); updateCV(); }
+
+document.getElementById('in-photo').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      document.querySelectorAll('.out-photo').forEach(img => img.src = event.target.result);
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+function setTheme(primary, secondary, btn) {
+  document.documentElement.style.setProperty('--primary', primary);
+  document.documentElement.style.setProperty('--secondary', secondary);
+  document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function changeTemplate(id, lang) {
+  currentLang = lang;
+  document.querySelectorAll('.cv-page').forEach(page => page.classList.remove('active-template'));
+  document.getElementById(`template-${id}`).classList.add('active-template');
+
+  document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tpl-btn-${id}`).classList.add('active');
+
+  updateCV();
+}
+
+function switchView(view, btn) {
+  document.querySelectorAll('.v-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if(view === 'cv') {
+    document.getElementById('scale-wrapper').classList.remove('print-hide', 'm-hide');
+    document.getElementById('card-preview').classList.add('print-hide', 'm-hide');
+    document.getElementById('card-preview').style.display = 'none';
+    document.getElementById('scale-wrapper').style.display = 'flex';
+  } else {
+    document.getElementById('scale-wrapper').classList.add('print-hide', 'm-hide');
+    document.getElementById('card-preview').classList.remove('print-hide', 'm-hide');
+    document.getElementById('card-preview').style.display = 'flex';
+    document.getElementById('scale-wrapper').style.display = 'none';
+  }
+}
+
+function toggleMobile(mode) {
+  const sidebar = document.getElementById('sidebar');
+  const preview = document.getElementById('preview-area');
+  const navForm = document.getElementById('nav-form');
+  const navPrev = document.getElementById('nav-preview');
+
+  if (mode === 'form') {
+    sidebar.classList.remove('m-hide');
+    preview.classList.remove('m-show');
+    navForm.classList.add('active');
+    navPrev.classList.remove('active');
+  } else {
+    sidebar.classList.add('m-hide');
+    preview.classList.add('m-show');
+    navForm.classList.remove('active');
+    navPrev.classList.add('active');
+    updateCV(); 
+  }
+}
+
+function updateCV() {
+  const name = document.getElementById("in-name").value || "الاسم";
+  const title = document.getElementById("in-title").value || "المسمى الوظيفي";
+  const phone = document.getElementById("in-phone").value || "";
+  const email = document.getElementById("in-email").value || "";
+  const address = document.getElementById("in-address").value || "";
+  const summary = document.getElementById("in-summary").value || "";
+  const skills = document.getElementById("in-skills").value.split(',');
+  const langs = document.getElementById("in-langs").value.split(',');
+
+  const labels = dict[currentLang];
+  setText('.lbl-contact', labels.contact);
+  setText('.lbl-skills', labels.skills);
+  setText('.lbl-langs', labels.langs);
+  setText('.lbl-profile', labels.profile);
+  setText('.lbl-exp', labels.exp);
+  setText('.lbl-edu', labels.edu);
+
+  setText('.out-name', name);
+  setText('.out-title', title);
+  setText('.out-phone', phone);
+  setText('.out-email', email);
+  setText('.out-address', address);
+  setText('.out-summary', summary);
+
+  let skillsHtmlList = "", skillsHtmlTags = "";
+  skills.forEach(s => { if(s.trim()){ skillsHtmlList += `<li>${s.trim()}</li>`; skillsHtmlTags += `<span>${s.trim()}</span>`; } });
+  setHtml('.out-skills', skillsHtmlList);
+  setHtml('.out-skills-tags', skillsHtmlTags);
+
+  let langsHtmlList = "", langsHtmlTags = "";
+  langs.forEach(s => { if(s.trim()){ langsHtmlList += `<li>${s.trim()}</li>`; langsHtmlTags += `<span>${s.trim()}</span>`; } });
+  setHtml('.out-langs', langsHtmlList);
+  setHtml('.out-langs-tags', langsHtmlTags);
+
+  let expHtml = "";
+  expData.forEach(exp => {
+    expHtml += `
+      <div class="timeline-item">
+        <div class="tl-header"><h4 class="tl-title">${exp.title}</h4><span class="tl-date">${exp.date}</span></div>
+        <div class="tl-subtitle">${exp.subtitle}</div>
+        <p class="tl-desc">${exp.desc}</p>
+      </div>`;
+  });
+  setHtml('.out-exp', expHtml);
+
+  let eduHtml = "";
+  eduData.forEach(edu => {
+    eduHtml += `
+      <div class="timeline-item">
+        <div class="tl-header"><h4 class="tl-title">${edu.title}</h4><span class="tl-date">${edu.date}</span></div>
+        <div class="tl-subtitle">${edu.subtitle}</div>
+        <p class="tl-desc">${edu.desc}</p>
+      </div>`;
+  });
+  setHtml('.out-edu', eduHtml);
+
+  const qrData = encodeURIComponent(`TEL:${phone}`);
+  document.getElementById("card-qr").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+}
+
+function exportPDF() {
+  const element = document.querySelector('.cv-page.active-template');
+  const wrapper = document.getElementById('scale-wrapper');
+  
+  const oldTransform = wrapper.style.transform;
+  const oldHeight = wrapper.style.height;
+  
+  wrapper.style.transform = 'scale(1)';
+  wrapper.style.height = 'auto';
+  
+  const btn = document.getElementById('btn-export');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإصدار...';
+
+  const opt = {
+    margin:       0,
+    filename:     'OLA_CV_Export.pdf',
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  setTimeout(() => {
+      html2pdf().set(opt).from(element).save().then(() => {
+        btn.innerHTML = oldText;
+        wrapper.style.transform = oldTransform;
+        wrapper.style.height = oldHeight;
+      }).catch(err => {
+        alert("حدث خطأ أثناء الإصدار.");
+        btn.innerHTML = oldText;
+        wrapper.style.transform = oldTransform;
+        wrapper.style.height = oldHeight;
+      });
+  }, 500);
+}
+
+function sharePDF() {
+  const element = document.querySelector('.cv-page.active-template');
+  const wrapper = document.getElementById('scale-wrapper');
+  
+  const oldTransform = wrapper.style.transform;
+  const oldHeight = wrapper.style.height;
+  wrapper.style.transform = 'scale(1)';
+  wrapper.style.height = 'auto';
+  
+  const btn = document.getElementById('btn-share');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التجهيز للمشاركة...';
+
+  const opt = {
+    margin:       0,
+    filename:     'OLA_CV.pdf',
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  setTimeout(() => {
+      html2pdf().set(opt).from(element).output('blob').then((pdfBlob) => {
+        wrapper.style.transform = oldTransform;
+        wrapper.style.height = oldHeight;
+        btn.innerHTML = oldText;
+
+        const file = new File([pdfBlob], "OLA_CV.pdf", { type: "application/pdf" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+                files: [file],
+                title: 'السيرة الذاتية - OLA',
+                text: 'مرحباً، أشارك معك السيرة الذاتية الخاصة بي.'
+            }).catch(err => console.log("تم إلغاء المشاركة", err));
+        } else {
+            alert("متصفحك الحالي لا يدعم المشاركة المباشرة، سيتم حفظ الملف في هاتفك بدلاً من ذلك.");
+            const url = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "OLA_CV.pdf";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+      }).catch(err => {
+        alert("حدث خطأ أثناء التجهيز.");
+        wrapper.style.transform = oldTransform;
+        wrapper.style.height = oldHeight;
+        btn.innerHTML = oldText;
+      });
+  }, 500);
+}
+
+window.onload = () => {
+  renderExpInputs();
+  renderEduInputs();
+  const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230a2e6d'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
+  document.querySelectorAll('.out-photo').forEach(img => img.src = defaultImg);
+  updateCV();
+};
+</script>
+</body>
+</html>
