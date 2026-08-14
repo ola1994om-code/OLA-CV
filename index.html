@@ -90,7 +90,7 @@
       min-width: var(--a4-w) !important; min-height: var(--a4-h) !important; 
       max-width: var(--a4-w) !important; max-height: var(--a4-h) !important; 
       background: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
-      overflow: hidden; display: none;
+      overflow: hidden; display: none; margin: 0 auto;
   }
   .cv-page.active-template { display: flex; }
 
@@ -190,7 +190,7 @@
   /* بطاقات العمل */
   .business-card-container { display: none; flex-direction: column; align-items: center; width: 100%; }
   
-  .card-wrapper { display: none; flex-direction: column; gap: 20px; align-items: center; width: 100%; }
+  .card-wrapper { display: none; flex-direction: column; gap: 20px; align-items: center; width: 100%; margin: 0 auto; }
   .card-wrapper.active-card { display: flex; }
   
   .b-card { width: var(--card-w) !important; height: var(--card-h) !important; min-width: var(--card-w) !important; min-height: var(--card-h) !important; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; position: relative; display: flex; direction: rtl;}
@@ -248,7 +248,7 @@
     .sidebar, .view-tabs, .actions-card, .mobile-nav { display: none !important; }
     .preview-area { padding: 0; background: none; overflow: visible; height: auto; display: block; position: static; }
     .cv-scale-wrapper { transform: scale(1) !important; height: auto !important; width: 100%; }
-    .cv-page { box-shadow: none !important; width: 210mm !important; height: 297mm !important; margin: 0; page-break-after: avoid; }
+    .cv-page { box-shadow: none !important; width: 210mm !important; height: 297mm !important; margin: 0 auto; page-break-after: avoid; }
     .business-card-container { transform: scale(1) !important; page-break-inside: avoid; margin-bottom: 20px;}
     .card-wrapper:not(.active-card) { display: none !important; }
     .b-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 20px;}
@@ -931,15 +931,47 @@ function getActiveElementToExport() {
     }
 }
 
+// ==========================================
+// التعديل الرئيسي لضمان إصدار الـ PDF بدقة
+// ==========================================
+function prepareForExport(wrapper, element) {
+    window.scrollTo(0, 0); // تصفير الـ Scroll لتجنب أي قص من الأعلى
+    
+    const state = {
+        transform: wrapper.style.transform,
+        height: wrapper.style.height,
+        justifyContent: wrapper.style.justifyContent,
+        margin: element.style.margin,
+        dir: document.documentElement.dir
+    };
+
+    // إلغاء التوسيط مؤقتاً لحل مشكلة الإزاحة
+    wrapper.style.transform = 'scale(1)';
+    wrapper.style.height = 'auto';
+    wrapper.style.justifyContent = 'flex-start';
+    element.style.margin = '0';
+    
+    // قلب الاتجاه العام للملف إلى ltr مؤقتاً لكي تقرأ مكتبة html2canvas الأبعاد من النقطة صفر
+    // مع بقاء القوالب نفسها محافظة على الـ dir="rtl" بداخلها
+    document.documentElement.dir = 'ltr'; 
+
+    return state;
+}
+
+function restoreAfterExport(wrapper, element, state) {
+    wrapper.style.transform = state.transform;
+    wrapper.style.height = state.height;
+    wrapper.style.justifyContent = state.justifyContent;
+    element.style.margin = state.margin;
+    document.documentElement.dir = state.dir;
+}
+
 function exportPDF() {
   const element = getActiveElementToExport();
   const wrapper = document.getElementById('scale-wrapper');
   
-  const oldTransform = wrapper.style.transform;
-  const oldHeight = wrapper.style.height;
-  
-  wrapper.style.transform = 'scale(1)';
-  wrapper.style.height = 'auto';
+  // حفظ الحالة وإلغاء خصائص الإزاحة
+  const oldState = prepareForExport(wrapper, element);
   
   const btn = document.getElementById('btn-export');
   const oldText = btn.innerHTML;
@@ -951,20 +983,26 @@ function exportPDF() {
     margin:       0,
     filename:     fileName,
     image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
+    html2canvas:  { 
+        scale: 2, 
+        useCORS: true, 
+        windowWidth: activeView === 'cv' ? 794 : 321,
+        x: 0, // إجبار البداية من النقطة 0
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
+    },
     jsPDF:        { unit: 'mm', format: activeView === 'cv' ? 'a4' : [85, 55], orientation: activeView === 'cv' ? 'portrait' : 'landscape' }
   };
 
   setTimeout(() => {
       html2pdf().set(opt).from(element).save().then(() => {
         btn.innerHTML = oldText;
-        wrapper.style.transform = oldTransform;
-        wrapper.style.height = oldHeight;
+        restoreAfterExport(wrapper, element, oldState); // استعادة الشكل
       }).catch(err => {
         alert("حدث خطأ أثناء الإصدار.");
         btn.innerHTML = oldText;
-        wrapper.style.transform = oldTransform;
-        wrapper.style.height = oldHeight;
+        restoreAfterExport(wrapper, element, oldState);
       });
   }, 500);
 }
@@ -973,10 +1011,8 @@ function sharePDF() {
   const element = getActiveElementToExport();
   const wrapper = document.getElementById('scale-wrapper');
   
-  const oldTransform = wrapper.style.transform;
-  const oldHeight = wrapper.style.height;
-  wrapper.style.transform = 'scale(1)';
-  wrapper.style.height = 'auto';
+  // حفظ الحالة وإلغاء خصائص الإزاحة
+  const oldState = prepareForExport(wrapper, element);
   
   const btn = document.getElementById('btn-share');
   const oldText = btn.innerHTML;
@@ -989,14 +1025,21 @@ function sharePDF() {
     margin:       0,
     filename:     fileName,
     image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
+    html2canvas:  { 
+        scale: 2, 
+        useCORS: true, 
+        windowWidth: activeView === 'cv' ? 794 : 321,
+        x: 0, 
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
+    },
     jsPDF:        { unit: 'mm', format: activeView === 'cv' ? 'a4' : [85, 55], orientation: activeView === 'cv' ? 'portrait' : 'landscape' }
   };
 
   setTimeout(() => {
       html2pdf().set(opt).from(element).output('blob').then((pdfBlob) => {
-        wrapper.style.transform = oldTransform;
-        wrapper.style.height = oldHeight;
+        restoreAfterExport(wrapper, element, oldState); // استعادة الشكل
         btn.innerHTML = oldText;
 
         const file = new File([pdfBlob], fileName, { type: "application/pdf" });
@@ -1018,8 +1061,7 @@ function sharePDF() {
         }
       }).catch(err => {
         alert("حدث خطأ أثناء التجهيز.");
-        wrapper.style.transform = oldTransform;
-        wrapper.style.height = oldHeight;
+        restoreAfterExport(wrapper, element, oldState);
         btn.innerHTML = oldText;
       });
   }, 500);
