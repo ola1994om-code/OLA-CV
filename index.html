@@ -27,32 +27,29 @@
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; flex-direction: row;}
   
-  /* ================= شريط الإدخال ================= */
-  .sidebar { width: 420px; background: var(--bg); height: 100vh; overflow-y: auto; padding: 20px; box-shadow: inset 5px 0 15px rgba(0,0,0,0.03); z-index: 10; display: flex; flex-direction: column; }
+  /* شريط الإدخال */
+  .sidebar { width: 420px; background: var(--bg); height: 100vh; overflow-y: auto; padding: 20px; padding-bottom: 140px; box-shadow: inset 5px 0 15px rgba(0,0,0,0.03); z-index: 10; display: flex; flex-direction: column; }
   .sidebar::-webkit-scrollbar { width: 6px; }
   .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   
-  .brand { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--line); }
+  .brand { text-align: center; margin-bottom: 20px; padding-bottom: 15px; }
   .brand-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
   .brand h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 22px; }
   .brand p { margin: 0; color: var(--light-text); font-size: 12px; font-weight: bold; }
   
-  /* تصميم البطاقات لأقسام الإدخال */
   .form-section { background: var(--panel-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin-bottom: 20px; border: 1px solid #f8fafc; }
   .form-section-title { font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;}
   
-  /* بطاقات القوالب */
-  .tpl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
-  .tpl-card { border: 2px solid var(--line); border-radius: 10px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .tpl-card i { font-size: 24px; margin-bottom: 8px; color: var(--light-text); transition: 0.2s;}
-  .tpl-name { font-size: 13px; font-weight: bold; color: var(--text); }
-  .tpl-lang { font-size: 11px; color: var(--light-text); margin-top: 4px; background: var(--bg); padding: 2px 8px; border-radius: 10px;}
+  .tpl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; }
+  .tpl-card { border: 2px solid var(--line); border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer; transition: 0.2s; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .tpl-card i { font-size: 22px; margin-bottom: 6px; color: var(--light-text); transition: 0.2s;}
+  .tpl-name { font-size: 12px; font-weight: bold; color: var(--text); }
+  .tpl-lang { font-size: 10px; color: var(--light-text); margin-top: 3px; background: var(--bg); padding: 2px 6px; border-radius: 10px;}
   .tpl-card:hover { border-color: #cbd5e1; transform: translateY(-2px); }
   .tpl-card.active { border-color: var(--primary); background: #f4f7fc; box-shadow: 0 4px 10px rgba(10, 46, 109, 0.1); }
   .tpl-card.active i { color: var(--primary); }
   .tpl-card.active .tpl-lang { background: var(--primary); color: #fff; }
 
-  /* الحقول (Inputs) */
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 13px; color: #475569; }
   .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; transition: 0.3s; background: #f8fafc; color: var(--text); }
@@ -60,29 +57,23 @@
   .form-group textarea { resize: vertical; min-height: 80px; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   
-  .btn-add { background: #e0e7ff; color: #3730a3; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 10px;}
+  .btn-add { background: #e0e7ff; color: #3730a3; border: none; padding: 10px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 10px;}
   .btn-add:hover { background: #c7d2fe; }
   .btn-remove { background: #fee2e2; color: #991b1b; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 10px; width: 100%; transition: 0.2s; font-weight:bold;}
   .btn-remove:hover { background: #fca5a5; }
   
   .dynamic-item { background: #f8fafc; border: 1px solid var(--line); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
   
-  /* اختيار الألوان */
-  .theme-picker { display: flex; gap: 12px; margin-top: 10px; }
-  .color-btn { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;}
+  .theme-picker { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .color-btn { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;}
   .color-btn.active { transform: scale(1.15); box-shadow: 0 0 0 2px var(--text); }
 
-  /* أزرار الإصدار والمشاركة */
-  .actions-card { background: var(--panel-bg); padding: 20px; border-radius: 12px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto; position: sticky; bottom: 0;}
-  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-  .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(10, 46, 109, 0.2);}
-  .btn-secondary { background: var(--secondary); color: #000; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-  .btn-secondary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);}
-  
+  .actions-card { background: var(--panel-bg); padding: 15px; border-radius: 12px; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; margin-bottom: 20px; border: 1px solid var(--line);}
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
+  .btn-secondary { background: var(--secondary); color: #000; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
   .btn-share { grid-column: span 2; background: #10b981; color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-  .btn-share:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
 
-  /* ================= مساحة المعاينة ================= */
+  /* مساحة المعاينة */
   .preview-area { flex: 1; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 30px; background: #cbd5e1; }
   .preview-area::-webkit-scrollbar { width: 8px; }
   .preview-area::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
@@ -91,10 +82,9 @@
   .v-tab { padding: 10px 25px; border: none; background: transparent; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 14px; color: var(--light-text); transition: 0.2s;}
   .v-tab.active { background: var(--primary); color: #fff; }
 
-  /* الغلاف المسؤول عن تصغير السيرة الذاتية للموبايل دون تشويهها */
   .cv-scale-wrapper { display: flex; justify-content: center; align-items: flex-start; width: 100%; transform-origin: top center; transition: 0.3s; }
   
-  /* ================= القوالب (Templates) ================= */
+  /* القوالب */
   .cv-page { 
       width: var(--a4-w) !important; height: var(--a4-h) !important; 
       min-width: var(--a4-w) !important; min-height: var(--a4-h) !important; 
@@ -104,49 +94,55 @@
   }
   .cv-page.active-template { display: flex; }
 
-  /* المشتركات (العامة للـ CV) */
+  /* تنسيق الخط الزمني (تم حل مشكلة تداخل النصوص هنا) */
   .timeline { position: relative; }
-  .timeline-item { position: relative; padding: 0 30px; margin-bottom: 25px; }
+  .timeline-item { position: relative; margin-bottom: 25px; }
   .timeline-item:last-child { margin-bottom: 0; }
+  
+  .cv-page[dir="rtl"] .timeline-item { padding-right: 35px; padding-left: 0; }
+  .cv-page[dir="ltr"] .timeline-item { padding-left: 35px; padding-right: 0; }
+  
   .cv-page[dir="rtl"] .timeline-item::before { right: 0; }
   .cv-page[dir="ltr"] .timeline-item::before { left: 0; }
-  .timeline-item::before { content: ''; position: absolute; top: 6px; width: 14px; height: 14px; background: var(--secondary); border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--secondary); z-index: 2; }
-  .cv-page[dir="rtl"] .timeline-item::after { right: 6px; }
-  .cv-page[dir="ltr"] .timeline-item::after { left: 6px; }
+  .timeline-item::before { content: ''; position: absolute; top: 6px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--secondary); z-index: 2; }
+  
+  .cv-page[dir="rtl"] .timeline-item::after { right: 5px; }
+  .cv-page[dir="ltr"] .timeline-item::after { left: 5px; }
   .timeline-item::after { content: ''; position: absolute; top: 20px; bottom: -25px; width: 2px; background: var(--line); z-index: 1; }
   .timeline-item:last-child::after { display: none; }
-  .tl-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; gap: 5px;}
-  .tl-title { font-size: 17px; font-weight: bold; color: var(--text); margin: 0; }
-  .tl-date { font-size: 12px; font-weight: bold; color: var(--primary); background: #f1f5f9; padding: 4px 10px; border-radius: 20px; display: inline-block;}
-  .tl-subtitle { font-size: 14px; color: var(--secondary); font-weight: bold; margin-bottom: 8px; }
-  .tl-desc { font-size: 13px; line-height: 1.7; color: var(--light-text); margin: 0; }
+  
+  .tl-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; flex-wrap: wrap; gap: 5px;}
+  .tl-title { font-size: 16px; font-weight: bold; color: var(--text); margin: 0; }
+  .tl-date { font-size: 11px; font-weight: bold; color: var(--primary); background: #f1f5f9; padding: 3px 8px; border-radius: 20px; display: inline-block;}
+  .tl-subtitle { font-size: 13px; color: var(--secondary); font-weight: bold; margin-bottom: 2px; }
+  .tl-company-info { font-size: 11px; color: var(--light-text); margin-bottom: 6px; display: flex; gap: 12px; }
+  .tl-desc { font-size: 12px; line-height: 1.6; color: var(--light-text); margin: 0; }
 
-  /* شعار داخل السيرة الذاتية */
   .cv-top-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
   .cv-top-brand img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
   .cv-top-brand span { font-size: 12px; font-weight: bold; color: var(--light-text); letter-spacing: 1px; }
 
-  /* ---------------- القالب 1: الرسمي عربي ---------------- */
+  /* القالب 1 */
   #template-1 { flex-direction: row; direction: rtl; }
-  #template-1 .t1-sidebar { width: 35%; background: var(--primary); color: #ffffff; padding: 40px 30px; display: flex; flex-direction: column; }
-  #template-1 .t1-main { width: 65%; background: #ffffff; padding: 50px 40px; color: var(--text); }
-  .t1-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.2); margin: 0 auto 30px auto; display: block;}
-  .t1-side-title { font-size: 18px; font-weight: bold; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; margin-bottom: 20px; color: #fff; text-transform: uppercase;}
-  .t1-contact { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
-  .t1-contact-item { display: flex; align-items: center; gap: 12px; font-size: 13px; word-break: break-all; }
-  .t1-contact-item i { width: 25px; height: 25px; background: var(--secondary); color: var(--primary); display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 12px; flex-shrink: 0;}
-  .t1-side-list { list-style: none; padding: 0; margin: 0 0 40px 0; }
-  .t1-side-list li { position: relative; padding: 0 18px; margin-bottom: 12px; font-size: 14px; line-height: 1.5; }
-  #template-1 .t1-side-list li::before { right: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 10px; top: 3px; }
-  .t1-name { font-size: 38px; font-weight: 800; color: var(--primary); margin: 0 0 8px 0; line-height: 1.1; }
-  .t1-title { font-size: 18px; font-weight: 600; color: var(--secondary); margin: 0 0 35px 0; }
-  .t1-section { margin-bottom: 35px; }
-  .t1-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid var(--line); padding-bottom: 10px; }
-  .t1-section-header i { color: var(--secondary); font-size: 22px; }
-  .t1-section-header h3 { margin: 0; font-size: 22px; color: var(--primary); font-weight: bold; }
-  .t1-summary { font-size: 14px; line-height: 1.8; color: var(--light-text); text-align: justify; }
+  #template-1 .t1-sidebar { width: 38%; background: var(--primary); color: #ffffff; padding: 40px 25px; display: flex; flex-direction: column; }
+  #template-1 .t1-main { width: 62%; background: #ffffff; padding: 50px 35px; color: var(--text); }
+  .t1-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.2); margin: 0 auto 30px auto; display: block;}
+  .t1-side-title { font-size: 17px; font-weight: bold; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; margin-bottom: 15px; color: #fff; text-transform: uppercase;}
+  .t1-contact { display: flex; flex-direction: column; gap: 12px; margin-bottom: 35px; }
+  .t1-contact-item { display: flex; align-items: center; gap: 10px; font-size: 12px; word-break: break-all; }
+  .t1-contact-item i { width: 22px; height: 22px; background: var(--secondary); color: var(--primary); display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 11px; flex-shrink: 0;}
+  .t1-side-list { list-style: none; padding: 0; margin: 0 0 35px 0; }
+  .t1-side-list li { position: relative; padding: 0 16px; margin-bottom: 10px; font-size: 13px; line-height: 1.4; }
+  #template-1 .t1-side-list li::before { right: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 9px; top: 3px; }
+  .t1-name { font-size: 34px; font-weight: 800; color: var(--primary); margin: 0 0 6px 0; line-height: 1.1; }
+  .t1-title { font-size: 16px; font-weight: 600; color: var(--secondary); margin: 0 0 30px 0; }
+  .t1-section { margin-bottom: 30px; }
+  .t1-section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+  .t1-section-header i { color: var(--secondary); font-size: 20px; }
+  .t1-section-header h3 { margin: 0; font-size: 20px; color: var(--primary); font-weight: bold; }
+  .t1-summary { font-size: 13px; line-height: 1.7; color: var(--light-text); text-align: justify; }
 
-  /* ---------------- القالب 2: العصري عربي ---------------- */
+  /* القالب 2 */
   #template-2 { flex-direction: column; direction: rtl; }
   .t2-header { background: var(--primary); padding: 40px 50px; display: flex; align-items: center; gap: 40px; color: #fff; }
   .t2-photo { width: 140px; height: 140px; border-radius: 12px; object-fit: cover; border: 3px solid var(--secondary); background: #fff;}
@@ -164,18 +160,18 @@
   .t2-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .t2-tags span { background: var(--primary); color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 13px; }
 
-  /* ---------------- القالب 3: إنجليزي Pro (LTR) ---------------- */
+  /* القالب 3 */
   #template-3 { flex-direction: row; direction: ltr; } 
-  #template-3 .t1-sidebar { width: 35%; background: var(--primary); color: #ffffff; padding: 40px 30px; display: flex; flex-direction: column; }
-  #template-3 .t1-main { width: 65%; background: #ffffff; padding: 50px 40px; color: var(--text); }
-  #template-3 .t1-side-list li::before { left: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 10px; top: 3px; }
+  #template-3 .t1-sidebar { width: 38%; background: var(--primary); color: #ffffff; padding: 40px 25px; display: flex; flex-direction: column; }
+  #template-3 .t1-main { width: 62%; background: #ffffff; padding: 50px 35px; color: var(--text); }
+  #template-3 .t1-side-list li::before { left: 0; content: '■'; color: var(--secondary); position: absolute; font-size: 9px; top: 3px; }
   
-  /* ---------------- القالب 4: إنجليزي Creative (LTR) ---------------- */
+  /* القالب 4 */
   #template-4 { flex-direction: column; direction: ltr; }
   #template-4 .t2-main { width: 65%; padding: 40px 30px 40px 50px; }
   #template-4 .t2-sidebar { width: 35%; padding: 40px 50px 40px 30px; background: #f8fafc; border-left: 1px solid var(--line); }
 
-  /* ---------------- القالب 5: فرنسي Elegant (LTR) ---------------- */
+  /* القالب 5 */
   #template-5 { flex-direction: column; padding: 50px; background: #fff; direction: ltr;}
   .t5-header { text-align: center; border-bottom: 1px solid var(--line); padding-bottom: 30px; margin-bottom: 30px; }
   .t5-photo { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin: 0 auto 15px auto; padding: 4px;}
@@ -191,27 +187,48 @@
   .t5-list { list-style: none; padding: 0; margin: 0; }
   .t5-list li { margin-bottom: 10px; font-size: 14px; border-left: 3px solid var(--secondary); padding-left: 15px; background: #f8fafc; padding: 10px 15px; }
 
-  /* ================= تصميم بطاقة العمل ================= */
-  .business-card-container { display: none; flex-direction: column; gap: 20px; align-items: center; }
+  /* بطاقات العمل */
+  .business-card-container { display: none; flex-direction: column; align-items: center; width: 100%; }
+  
+  .card-wrapper { display: none; flex-direction: column; gap: 20px; align-items: center; width: 100%; }
+  .card-wrapper.active-card { display: flex; }
+  
   .b-card { width: var(--card-w) !important; height: var(--card-h) !important; min-width: var(--card-w) !important; min-height: var(--card-h) !important; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; position: relative; display: flex; direction: rtl;}
-  .b-card-front { background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%); color: #fff; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; width: 100%;}
-  .b-card-back { background: #fff; display: flex; width: 100%;}
-  .bc-right { width: 35%; background: var(--primary); display: flex; justify-content: center; align-items: center; }
-  .bc-left { width: 65%; padding: 20px 15px; display: flex; flex-direction: column; justify-content: center; }
+  
+  /* تصميم البطاقة 1 (الحديث) */
+  .c1-front { background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%); color: #fff; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; width: 100%;}
+  .c1-back { background: #fff; display: flex; width: 100%;}
+  .c1-right { width: 35%; background: var(--primary); display: flex; justify-content: center; align-items: center; }
+  .c1-left { width: 65%; padding: 20px 15px; display: flex; flex-direction: column; justify-content: center; }
   .bc-name { font-size: 20px; font-weight: bold; color: var(--primary); margin: 0 0 2px 0; }
   .bc-title { font-size: 11px; color: var(--secondary); margin: 0 0 15px 0; font-weight: bold; }
   .bc-contact { font-size: 10px; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
   .bc-contact i { color: var(--primary); width: 14px; text-align: center; }
   .bc-qr { width: 60px; height: 60px; background: #fff; padding: 2px; border-radius: 4px; }
+
+  /* تصميم البطاقة 2 (الكلاسيكي) */
+  .c2-front { background: #fff; color: var(--primary); flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; width: 100%; border: 4px solid var(--primary);}
+  .c2-back { background: #fff; display: flex; width: 100%; border: 4px solid var(--primary);}
+  .c2-right { width: 35%; background: #fff; display: flex; justify-content: center; align-items: center; border-left: 2px solid var(--line); }
+  .c2-left { width: 65%; padding: 20px 15px; display: flex; flex-direction: column; justify-content: center; }
+
+  /* تصميم البطاقة 3 (الداكن) */
+  .c3-front { background: var(--primary); color: var(--secondary); flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; width: 100%;}
+  .c3-back { background: #1e293b; display: flex; width: 100%;}
+  .c3-right { width: 35%; background: var(--primary); display: flex; justify-content: center; align-items: center; border-left: 1px solid rgba(255,255,255,0.1); }
+  .c3-left { width: 65%; padding: 20px 15px; display: flex; flex-direction: column; justify-content: center; }
+  .c3-left .bc-name { color: var(--secondary); }
+  .c3-left .bc-title { color: #cbd5e1; }
+  .c3-left .bc-contact { color: #f8fafc; }
+  .c3-left .bc-contact i { color: var(--secondary); }
   
-  /* شريط التنقل السفلي للموبايل (مخفي على الكمبيوتر) */
   .mobile-nav { display: none; }
 
-  /* ================= استجابة الموبايل (Responsive Mobile) ================= */
+  /* استجابة الموبايل */
   @media (max-width: 900px) {
     body { flex-direction: column; }
-    .sidebar { width: 100%; height: 100vh; padding-bottom: 90px; }
-    .preview-area { width: 100%; height: 100vh; position: fixed; top: 0; left: 0; padding: 15px; padding-top: 20px; padding-bottom: 90px; z-index: 20; display: none; }
+    .sidebar { width: 100%; height: 100vh; padding-bottom: 110px; }
+    .preview-area { width: 100%; height: 100vh; position: fixed; top: 0; left: 0; padding: 15px; padding-top: 20px; padding-bottom: 110px; z-index: 20; display: none; }
     
     .cv-scale-wrapper { transform: scale(0.42); height: 480px; }
     .business-card-container { transform: scale(0.85); transform-origin: top center; }
@@ -223,11 +240,8 @@
 
     .m-hide { display: none !important; }
     .m-show { display: flex !important; }
-    
-    .actions-card { border-radius: 0; margin: 0 -20px; padding: 15px 20px;}
   }
 
-  /* ================= إعدادات الطباعة للكمبيوتر (A4) ================= */
   @media print {
     @page { size: A4 portrait; margin: 0; }
     body { margin: 0; padding: 0; background: #fff; }
@@ -236,14 +250,14 @@
     .cv-scale-wrapper { transform: scale(1) !important; height: auto !important; width: 100%; }
     .cv-page { box-shadow: none !important; width: 210mm !important; height: 297mm !important; margin: 0; page-break-after: avoid; }
     .business-card-container { transform: scale(1) !important; page-break-inside: avoid; margin-bottom: 20px;}
-    .b-card { box-shadow: none; border: 1px solid #ccc; }
+    .card-wrapper:not(.active-card) { display: none !important; }
+    .b-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 20px;}
     .print-hide { display: none !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- شريط الإدخال (البيانات) -->
 <div class="sidebar" id="sidebar">
   <div class="brand">
     <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" class="brand-logo" alt="Logo">
@@ -251,7 +265,6 @@
     <p>أداة احترافية لإصدار السير الذاتية والبطاقات</p>
   </div>
   
-  <!-- قسم القوالب كبطاقات بصرية -->
   <div class="form-section">
     <div class="form-section-title"><i class="fas fa-layer-group"></i> اختيار القالب واللغة</div>
     <div class="tpl-grid">
@@ -268,7 +281,7 @@
         <i class="fas fa-columns"></i><div class="tpl-name">Creative</div><div class="tpl-lang">English</div>
       </div>
       <div class="tpl-card" id="tpl-btn-5" onclick="changeTemplate(5, 'fr')">
-        <i class="fas fa-file-signature"></i><div class="tpl-name">Éلégant</div><div class="tpl-lang">Français</div>
+        <i class="fas fa-file-signature"></i><div class="tpl-name">Élégant</div><div class="tpl-lang">Français</div>
       </div>
     </div>
     
@@ -278,10 +291,26 @@
       <div class="color-btn" style="background: #0f766e;" onclick="setTheme('#0f766e', '#fde047', this)"></div>
       <div class="color-btn" style="background: #be123c;" onclick="setTheme('#be123c', '#fca5a5', this)"></div>
       <div class="color-btn" style="background: #1e293b;" onclick="setTheme('#1e293b', '#94a3b8', this)"></div>
+      <div class="color-btn" style="background: #7c3aed;" onclick="setTheme('#7c3aed', '#fde047', this)"></div>
+      <div class="color-btn" style="background: #d97706;" onclick="setTheme('#d97706', '#fef08a', this)"></div>
     </div>
   </div>
 
-  <!-- قسم المعلومات الشخصية -->
+  <div class="form-section" id="card-templates-section" style="display:none;">
+    <div class="form-section-title"><i class="fas fa-id-badge"></i> قوالب بطاقة العمل</div>
+    <div class="tpl-grid">
+      <div class="tpl-card active" id="card-btn-1" onclick="changeCardTemplate(1)">
+        <i class="fas fa-address-card"></i><div class="tpl-name">الحديث</div>
+      </div>
+      <div class="tpl-card" id="card-btn-2" onclick="changeCardTemplate(2)">
+        <i class="fas fa-address-card"></i><div class="tpl-name">الكلاسيكي</div>
+      </div>
+      <div class="tpl-card" id="card-btn-3" onclick="changeCardTemplate(3)">
+        <i class="fas fa-address-card"></i><div class="tpl-name">الداكن</div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-section">
     <div class="form-section-title"><i class="fas fa-user"></i> المعلومات الشخصية</div>
     <div class="form-group">
@@ -318,38 +347,39 @@
     </div>
   </div>
 
-  <!-- قسم الخبرات -->
   <div class="form-section">
     <div class="form-section-title"><i class="fas fa-briefcase"></i> الخبرات العملية</div>
     <div id="exp-container"></div>
     <button class="btn-add" onclick="addExp()"><i class="fas fa-plus"></i> إضافة خبرة جديدة</button>
   </div>
 
-  <!-- قسم التعليم -->
   <div class="form-section">
     <div class="form-section-title"><i class="fas fa-graduation-cap"></i> التعليم الأكاديمي</div>
     <div id="edu-container"></div>
     <button class="btn-add" onclick="addEdu()"><i class="fas fa-plus"></i> إضافة تعليم جديد</button>
   </div>
 
-  <!-- قسم المهارات واللغات -->
   <div class="form-section">
-    <div class="form-section-title"><i class="fas fa-star"></i> المهارات واللغات (افصل بفاصلة ،)</div>
-    <div class="form-group">
-      <label>المهارات</label>
-      <textarea id="in-skills" oninput="updateCV()">تطوير الويب الشامل, قواعد البيانات (Supabase), إنشاء تطبيقات الموبايل, إدارة الشبكات الإعلانية</textarea>
-    </div>
-    <div class="form-group">
-      <label>اللغات</label>
-      <input type="text" id="in-langs" value="العربية (اللغة الأم), الإنجليزية (مستوى متقدم)" oninput="updateCV()">
-    </div>
+    <div class="form-section-title"><i class="fas fa-star"></i> المهارات واللغات والهوايات</div>
+    <label style="font-size:12px; font-weight:bold; color:var(--light-text); display:block; margin-bottom:8px;">المهارات</label>
+    <div id="skills-container"></div>
+    <button class="btn-add" onclick="addSkill()"><i class="fas fa-plus"></i> إضافة مهارة</button>
+    
+    <div style="margin-top:15px;"></div>
+    <label style="font-size:12px; font-weight:bold; color:var(--light-text); display:block; margin-bottom:8px;">اللغات</label>
+    <div id="langs-container"></div>
+    <button class="btn-add" onclick="addLang()"><i class="fas fa-plus"></i> إضافة لغة</button>
+    
+    <div style="margin-top:15px;"></div>
+    <label style="font-size:12px; font-weight:bold; color:var(--light-text); display:block; margin-bottom:8px;">الهوايات</label>
+    <div id="hobbies-container"></div>
+    <button class="btn-add" onclick="addHobby()"><i class="fas fa-plus"></i> إضافة هواية</button>
   </div>
 
-  <!-- أزرار الإصدار والمشاركة -->
   <div class="actions-card print-hide">
-    <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> إصدار وطباعة (A4)</button>
+    <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
     <button class="btn-secondary" id="btn-export" onclick="exportPDF()"><i class="fas fa-download"></i> إصدار (PDF)</button>
-    <button class="btn-share" id="btn-share" onclick="sharePDF()"><i class="fas fa-share-nodes"></i> مشاركة 📤 (واتساب، إيميل...)</button>
+    <button class="btn-share" id="btn-share" onclick="sharePDF()"><i class="fas fa-share-nodes"></i> مشاركة PDF 📤</button>
   </div>
 </div>
 
@@ -361,11 +391,10 @@
     <button class="v-tab" onclick="switchView('card', this)">بطاقة العمل (Business Card)</button>
   </div>
 
-  <!-- الغلاف الخاص بالتصغير للموبايل -->
   <div class="cv-scale-wrapper" id="scale-wrapper">
       
-      <!-- ================= القالب 1: الرسمي عربي ================= -->
-      <div class="cv-page active-template" id="template-1">
+      <!-- القالب 1 تم اضافة dir rtl -->
+      <div class="cv-page active-template" id="template-1" dir="rtl">
         <div class="t1-sidebar">
           <div class="cv-top-brand"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
           <img class="out-photo t1-photo" src="">
@@ -376,9 +405,11 @@
             <div class="t1-contact-item"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
           </div>
           <h3 class="t1-side-title lbl-skills">المهارات</h3>
-          <ul class="t1-side-list out-skills"></ul>
+          <ul class="t1-side-list" id="out-skills-1"></ul>
           <h3 class="t1-side-title lbl-langs">اللغات</h3>
-          <ul class="t1-side-list out-langs"></ul>
+          <ul class="t1-side-list" id="out-langs-1"></ul>
+          <h3 class="t1-side-title lbl-hobbies">الهوايات</h3>
+          <ul class="t1-side-list" id="out-hobbies-1"></ul>
         </div>
         <div class="t1-main">
           <h1 class="t1-name out-name">الاسم</h1>
@@ -398,8 +429,8 @@
         </div>
       </div>
 
-      <!-- ================= القالب 2: العصري عربي ================= -->
-      <div class="cv-page" id="template-2">
+      <!-- القالب 2 -->
+      <div class="cv-page" id="template-2" dir="rtl">
         <div class="t2-header">
           <img class="out-photo t2-photo" src="">
           <div class="t2-header-info">
@@ -424,15 +455,17 @@
           </div>
           <div class="t2-sidebar">
             <h3 class="t2-section-title lbl-skills">المهارات</h3>
-            <div class="t2-tags out-skills-tags" style="margin-bottom:40px;"></div>
+            <div class="t2-tags" id="out-skills-2" style="margin-bottom:30px;"></div>
             <h3 class="t2-section-title lbl-langs">اللغات</h3>
-            <div class="t2-tags out-langs-tags"></div>
+            <div class="t2-tags" id="out-langs-2" style="margin-bottom:30px;"></div>
+            <h3 class="t2-section-title lbl-hobbies">الهوايات</h3>
+            <div class="t2-tags" id="out-hobbies-2"></div>
           </div>
         </div>
       </div>
 
-      <!-- ================= القالب 3: إنجليزي Pro (LTR) ================= -->
-      <div class="cv-page" id="template-3">
+      <!-- القالب 3 -->
+      <div class="cv-page" id="template-3" dir="ltr">
         <div class="t1-sidebar">
           <div class="cv-top-brand"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
           <img class="out-photo t1-photo" src="">
@@ -443,9 +476,11 @@
             <div class="t1-contact-item"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
           </div>
           <h3 class="t1-side-title lbl-skills">Skills</h3>
-          <ul class="t1-side-list out-skills"></ul>
+          <ul class="t1-side-list" id="out-skills-3"></ul>
           <h3 class="t1-side-title lbl-langs">Languages</h3>
-          <ul class="t1-side-list out-langs"></ul>
+          <ul class="t1-side-list" id="out-langs-3"></ul>
+          <h3 class="t1-side-title lbl-hobbies">Hobbies</h3>
+          <ul class="t1-side-list" id="out-hobbies-3"></ul>
         </div>
         <div class="t1-main">
           <h1 class="t1-name out-name">Name</h1>
@@ -465,8 +500,8 @@
         </div>
       </div>
 
-      <!-- ================= القالب 4: إنجليزي Creative (LTR) ================= -->
-      <div class="cv-page" id="template-4">
+      <!-- القالب 4 -->
+      <div class="cv-page" id="template-4" dir="ltr">
         <div class="t2-header">
           <img class="out-photo t2-photo" src="">
           <div class="t2-header-info">
@@ -491,15 +526,17 @@
           </div>
           <div class="t2-sidebar">
             <h3 class="t2-section-title lbl-skills">Skills</h3>
-            <div class="t2-tags out-skills-tags" style="margin-bottom:40px;"></div>
+            <div class="t2-tags" id="out-skills-4" style="margin-bottom:30px;"></div>
             <h3 class="t2-section-title lbl-langs">Languages</h3>
-            <div class="t2-tags out-langs-tags"></div>
+            <div class="t2-tags" id="out-langs-4" style="margin-bottom:30px;"></div>
+            <h3 class="t2-section-title lbl-hobbies">Hobbies</h3>
+            <div class="t2-tags" id="out-hobbies-4"></div>
           </div>
         </div>
       </div>
 
-      <!-- ================= القالب 5: فرنسي Elegant (LTR) ================= -->
-      <div class="cv-page" id="template-5">
+      <!-- القالب 5 -->
+      <div class="cv-page" id="template-5" dir="ltr">
         <div class="t5-header">
           <div class="cv-top-brand" style="border:none; justify-content:center; margin-bottom:10px;"><img src="https://i.ibb.co/7N40FyX0/1002053950.jpg"><span>ABU HUSSAM</span></div>
           <img class="out-photo t5-photo" src="">
@@ -519,74 +556,138 @@
           </div>
           <div>
             <h3 class="t5-section-title"><i class="fas fa-graduation-cap"></i><span class="lbl-edu">Éducation</span></h3>
-            <div class="timeline out-edu" style="margin-bottom:40px;"></div>
+            <div class="timeline out-edu" style="margin-bottom:30px;"></div>
             
             <h3 class="t5-section-title"><i class="fas fa-star"></i><span class="lbl-skills">Compétences</span></h3>
-            <ul class="t5-list out-skills"></ul>
+            <ul class="t5-list" id="out-skills-5"></ul>
             
-            <h3 class="t5-section-title" style="margin-top:40px;"><i class="fas fa-language"></i><span class="lbl-langs">Langues</span></h3>
-            <ul class="t5-list out-langs"></ul>
+            <h3 class="t5-section-title" style="margin-top:20px;"><i class="fas fa-language"></i><span class="lbl-langs">Langues</span></h3>
+            <ul class="t5-list" id="out-langs-5"></ul>
+
+            <h3 class="t5-section-title" style="margin-top:20px;"><i class="fas fa-heart"></i><span class="lbl-hobbies">Loisirs</span></h3>
+            <ul class="t5-list" id="out-hobbies-5"></ul>
           </div>
         </div>
       </div>
 
   </div>
 
-  <!-- حاوية بطاقة العمل -->
+  <!-- بطاقات العمل -->
   <div class="business-card-container print-hide" id="card-preview">
-    <div class="b-card">
-      <div class="b-card-front">
-        <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" style="width:35px; height:35px; border-radius:50%; object-fit:cover; margin-bottom:5px; border:1px solid #fff;">
-        <h2 style="margin:0 0 2px 0; font-size:24px; color:var(--secondary);">OLA</h2>
-        <div style="font-size:10px; letter-spacing:1px; opacity:0.9; margin-bottom:10px; text-transform: uppercase;">الخدمات الإلكترونية</div>
-        <h3 class="out-name" style="margin:0; font-size:16px;"></h3>
-      </div>
-    </div>
     
-    <div class="b-card">
-      <div class="b-card-back">
-        <div class="bc-right">
-          <img id="card-qr" class="bc-qr" src="">
+    <!-- القالب 1 (الحديث) -->
+    <div class="card-wrapper active-card" id="card-tpl-1">
+      <div class="b-card">
+        <div class="c1-front">
+          <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" style="width:35px; height:35px; border-radius:50%; object-fit:cover; margin-bottom:5px; border:1px solid #fff;">
+          <h2 style="margin:0 0 2px 0; font-size:24px; color:var(--secondary);">OLA</h2>
+          <div style="font-size:10px; letter-spacing:1px; opacity:0.9; margin-bottom:10px; text-transform: uppercase;">الخدمات الإلكترونية</div>
+          <h3 class="out-name" style="margin:0; font-size:16px;"></h3>
         </div>
-        <div class="bc-left">
-          <div class="bc-name out-name"></div>
-          <div class="bc-title out-title"></div>
-          <div class="bc-contact"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
-          <div class="bc-contact"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
-          <div class="bc-contact"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+      </div>
+      
+      <div class="b-card">
+        <div class="c1-back">
+          <div class="c1-right">
+            <img class="bc-qr card-qr-img" src="">
+          </div>
+          <div class="c1-left">
+            <div class="bc-name out-name"></div>
+            <div class="bc-title out-title"></div>
+            <div class="bc-contact"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+            <div class="bc-contact"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+            <div class="bc-contact"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- القالب 2 (الكلاسيكي) -->
+    <div class="card-wrapper" id="card-tpl-2">
+      <div class="b-card">
+        <div class="c2-front">
+          <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" style="width:45px; height:45px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--primary);">
+          <h2 style="margin:0 0 2px 0; font-size:22px; color:var(--primary);">OLA</h2>
+          <div style="font-size:10px; letter-spacing:1px; margin-bottom:10px; font-weight:bold;">الخدمات الإلكترونية</div>
+          <h3 class="out-name" style="margin:0; font-size:16px; color:var(--text);"></h3>
+        </div>
+      </div>
+      
+      <div class="b-card">
+        <div class="c2-back">
+          <div class="c2-right">
+            <img class="bc-qr card-qr-img" src="" style="border: 1px solid var(--line);">
+          </div>
+          <div class="c2-left">
+            <div class="bc-name out-name"></div>
+            <div class="bc-title out-title"></div>
+            <div class="bc-contact"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+            <div class="bc-contact"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+            <div class="bc-contact"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- القالب 3 (الداكن) -->
+    <div class="card-wrapper" id="card-tpl-3">
+      <div class="b-card">
+        <div class="c3-front">
+          <img src="https://i.ibb.co/7N40FyX0/1002053950.jpg" style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-bottom:8px; border:2px solid var(--secondary);">
+          <h2 style="margin:0 0 2px 0; font-size:24px; color:var(--secondary);">OLA</h2>
+          <div style="font-size:10px; letter-spacing:1px; color:#cbd5e1; margin-bottom:10px;">الخدمات الإلكترونية</div>
+          <h3 class="out-name" style="margin:0; font-size:16px; color:#fff;"></h3>
+        </div>
+      </div>
+      
+      <div class="b-card">
+        <div class="c3-back">
+          <div class="c3-right">
+            <img class="bc-qr card-qr-img" src="">
+          </div>
+          <div class="c3-left">
+            <div class="bc-name out-name"></div>
+            <div class="bc-title out-title"></div>
+            <div class="bc-contact"><i class="fas fa-phone"></i> <span class="out-phone" dir="ltr"></span></div>
+            <div class="bc-contact"><i class="fas fa-envelope"></i> <span class="out-email"></span></div>
+            <div class="bc-contact"><i class="fas fa-location-dot"></i> <span class="out-address"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-<!-- شريط التنقل السفلي الخاص بالموبايل فقط -->
 <div class="mobile-nav print-hide">
   <button id="nav-form" class="active" onclick="toggleMobile('form')">
     <i class="fas fa-edit"></i> تعديل البيانات
   </button>
   <button id="nav-preview" onclick="toggleMobile('preview')">
-    <i class="fas fa-eye"></i> معاينة السيرة
+    <i class="fas fa-eye"></i> معاينة المخرجات
   </button>
 </div>
 
 <script>
-/* قاموس الترجمة للعناوين */
 const dict = {
-  ar: { contact: "التواصل", skills: "المهارات", langs: "اللغات", profile: "نبذة تعريفية", exp: "الخبرات العملية", edu: "التعليم الأكاديمي" },
-  en: { contact: "Contact", skills: "Skills", langs: "Languages", profile: "Profile", exp: "Experience", edu: "Education" },
-  fr: { contact: "Contact", skills: "Compétences", langs: "Langues", profile: "Profil", exp: "Expérience", edu: "Éducation" }
+  ar: { contact: "التواصل", skills: "المهارات", langs: "اللغات", hobbies: "الهوايات", profile: "نبذة تعريفية", exp: "الخبرات العملية", edu: "التعليم الأكاديمي" },
+  en: { contact: "Contact", skills: "Skills", langs: "Languages", hobbies: "Hobbies", profile: "Profile", exp: "Experience", edu: "Education" },
+  fr: { contact: "Contact", skills: "Compétences", langs: "Langues", hobbies: "Loisirs", profile: "Profil", exp: "Expérience", edu: "Éducation" }
 };
 let currentLang = 'ar';
+let activeView = 'cv'; // لتحديد إذا كنا نصدر الـ cv أم الـ card
 
-/* البيانات الافتراضية */
 let expData = [
-  { title: "مؤسس ومطور أنظمة OLA", subtitle: "أبو حسام للخدمات الإلكترونية", date: "2020 - الحاضر", desc: "بناء وتطوير شبكات إعلانية، مراكز حسابات، ومتاجر احترافية باستخدام أحدث التقنيات." }
+  { title: "مؤسس ومطور أنظمة OLA", company: "أبو حسام للخدمات الإلكترونية", address: "بيروت، لبنان", phone: "70503468", start: "2020", end: "حتى الآن", present: true, desc: "بناء وتطوير شبكات إعلانية ومراكز حسابات باستخدام أحدث التقنيات." }
 ];
 let eduData = [
-  { title: "دبلوم في تقنية المعلومات", subtitle: "تطوير البرمجيات", date: "2015 - 2018", desc: "دراسة وتطبيق تقنيات برمجة الويب وتحليل قواعد البيانات." }
+  { title: "دبلوم تقنية المعلومات", company: "المعهد التقني", address: "لبنان", phone: "", start: "2015", end: "2018", present: false, desc: "تخصص تطوير البرمجيات وقواعد البيانات." }
 ];
+
+let skillsData = ["تطوير الويب الشامل", "قواعد البيانات Supabase", "إنشاء تطبيقات الموبايل", "إدارة الشبكات الإعلانية"];
+let langsData = ["العربية (اللغة الأم)", "الإنجليزية (متقدم)"];
+let hobbiesData = ["البرمجة والتطوير", "قراءة الكتب التقنية", "تصميم واجهات المستخدم"];
 
 const setHtml = (selector, html) => document.querySelectorAll(selector).forEach(el => el.innerHTML = html);
 const setText = (selector, text) => document.querySelectorAll(selector).forEach(el => el.innerText = text);
@@ -594,36 +695,84 @@ const setText = (selector, text) => document.querySelectorAll(selector).forEach(
 function renderExpInputs() {
   const container = document.getElementById("exp-container");
   container.innerHTML = "";
-  expData.forEach((exp, index) => {
+  expData.forEach((exp, i) => {
     container.innerHTML += `
       <div class="dynamic-item">
-        <div class="form-group"><input type="text" placeholder="المسمى الوظيفي" value="${exp.title}" oninput="expData[${index}].title=this.value; updateCV()"></div>
-        <div class="form-group"><input type="text" placeholder="الشركة / المشروع" value="${exp.subtitle}" oninput="expData[${index}].subtitle=this.value; updateCV()"></div>
-        <div class="form-group"><input type="text" placeholder="التاريخ (مثال: 2020 - الحاضر)" value="${exp.date}" oninput="expData[${index}].date=this.value; updateCV()" dir="ltr"></div>
-        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف والمهام" oninput="expData[${index}].desc=this.value; updateCV()" style="height:60px;">${exp.desc}</textarea></div>
-        <button class="btn-remove" onclick="removeExp(${index})"><i class="fas fa-trash"></i> حذف هذه الخبرة</button>
+        <div class="form-group"><input type="text" placeholder="المسمى الوظيفي" value="${exp.title}" oninput="expData[${i}].title=this.value; updateCV()"></div>
+        <div class="grid2">
+          <div class="form-group"><input type="text" placeholder="اسم الشركة / المؤسسة (اختياري)" value="${exp.company}" oninput="expData[${i}].company=this.value; updateCV()"></div>
+          <div class="form-group"><input type="text" placeholder="العنوان (اختياري)" value="${exp.address}" oninput="expData[${i}].address=this.value; updateCV()"></div>
+        </div>
+        <div class="grid2">
+          <div class="form-group"><input type="text" placeholder="رقم هاتف الشركة (اختياري)" value="${exp.phone}" oninput="expData[${i}].phone=this.value; updateCV()" dir="ltr"></div>
+          <div class="form-group">
+            <label style="font-size:11px; margin-bottom:2px;">حالة العمل</label>
+            <label style="font-weight:normal; font-size:13px; cursor:pointer;"><input type="checkbox" ${exp.present?'checked':''} onchange="expData[${i}].present=this.checked; toggleExpPresent(${i}, this.checked)"> حتى الآن (جارٍ العمل)</label>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="form-group"><input type="text" placeholder="تاريخ البدء (مثال: 2020)" value="${exp.start}" oninput="expData[${i}].start=this.value; updateCV()" dir="ltr"></div>
+          <div class="form-group"><input type="text" id="exp-end-${i}" placeholder="تاريخ الانتهاء" value="${exp.end}" oninput="expData[${i}].end=this.value; updateCV()" dir="ltr" ${exp.present?'disabled':''}></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف والمهام" oninput="expData[${i}].desc=this.value; updateCV()" style="height:50px;">${exp.desc}</textarea></div>
+        <button class="btn-remove" onclick="removeExp(${i})"><i class="fas fa-trash"></i> حذف هذه الخبرة</button>
       </div>`;
   });
 }
-function addExp() { expData.push({title:"", subtitle:"", date:"", desc:""}); renderExpInputs(); updateCV(); }
-function removeExp(index) { expData.splice(index, 1); renderExpInputs(); updateCV(); }
+function toggleExpPresent(i, isChecked) {
+  if(isChecked) { expData[i].end = "حتى الآن"; }
+  renderExpInputs();
+  updateCV();
+}
+function addExp() { expData.push({title:"", company:"", address:"", phone:"", start:"", end:"", present:false, desc:""}); renderExpInputs(); updateCV(); }
+function removeExp(i) { expData.splice(i, 1); renderExpInputs(); updateCV(); }
 
 function renderEduInputs() {
   const container = document.getElementById("edu-container");
   container.innerHTML = "";
-  eduData.forEach((edu, index) => {
+  eduData.forEach((edu, i) => {
     container.innerHTML += `
       <div class="dynamic-item">
-        <div class="form-group"><input type="text" placeholder="الدرجة العلمية" value="${edu.title}" oninput="eduData[${index}].title=this.value; updateCV()"></div>
-        <div class="form-group"><input type="text" placeholder="الجامعة / المعهد" value="${edu.subtitle}" oninput="eduData[${index}].subtitle=this.value; updateCV()"></div>
-        <div class="form-group"><input type="text" placeholder="التاريخ" value="${edu.date}" oninput="eduData[${index}].date=this.value; updateCV()" dir="ltr"></div>
-        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف" oninput="eduData[${index}].desc=this.value; updateCV()" style="height:60px;">${edu.desc}</textarea></div>
-        <button class="btn-remove" onclick="removeEdu(${index})"><i class="fas fa-trash"></i> حذف هذا التعليم</button>
+        <div class="form-group"><input type="text" placeholder="الدرجة العلمية / التخصص" value="${edu.title}" oninput="eduData[${i}].title=this.value; updateCV()"></div>
+        <div class="grid2">
+          <div class="form-group"><input type="text" placeholder="اسم المؤسسة / الجامعة (اختياري)" value="${edu.company}" oninput="eduData[${i}].company=this.value; updateCV()"></div>
+          <div class="form-group"><input type="text" placeholder="العنوان (اختياري)" value="${edu.address}" oninput="eduData[${i}].address=this.value; updateCV()"></div>
+        </div>
+        <div class="grid2">
+          <div class="form-group"><input type="text" placeholder="تاريخ البدء" value="${edu.start}" oninput="eduData[${i}].start=this.value; updateCV()" dir="ltr"></div>
+          <div class="form-group"><input type="text" placeholder="تاريخ الانتهاء" value="${edu.end}" oninput="eduData[${i}].end=this.value; updateCV()" dir="ltr"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;"><textarea placeholder="الوصف" oninput="eduData[${i}].desc=this.value; updateCV()" style="height:50px;">${edu.desc}</textarea></div>
+        <button class="btn-remove" onclick="removeEdu(${i})"><i class="fas fa-trash"></i> حذف هذا التعليم</button>
       </div>`;
   });
 }
-function addEdu() { eduData.push({title:"", subtitle:"", date:"", desc:""}); renderEduInputs(); updateCV(); }
-function removeEdu(index) { eduData.splice(index, 1); renderEduInputs(); updateCV(); }
+function addEdu() { eduData.push({title:"", company:"", address:"", start:"", end:"", desc:""}); renderEduInputs(); updateCV(); }
+function removeEdu(i) { eduData.splice(i, 1); renderEduInputs(); updateCV(); }
+
+function renderListInputs(type) {
+  let data = type==='skills'? skillsData : (type==='langs'? langsData : hobbiesData);
+  const container = document.getElementById(type+'-container');
+  container.innerHTML = "";
+  data.forEach((item, i) => {
+    let titleName = type==='skills'?'مهارة':(type==='langs'?'لغة':'هواية');
+    container.innerHTML += `
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
+        <input type="text" placeholder="أدخل ${titleName}" value="${item}" oninput="${type}Data[${i}]=this.value; updateCV()">
+        <button style="background:#fee2e2; color:#991b1b; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;" onclick="removeListItem('${type}', ${i})"><i class="fas fa-times"></i></button>
+      </div>`;
+  });
+}
+function addSkill() { skillsData.push(""); renderListInputs('skills'); updateCV(); }
+function addLang() { langsData.push(""); renderListInputs('langs'); updateCV(); }
+function addHobby() { hobbiesData.push(""); renderListInputs('hobbies'); updateCV(); }
+function removeListItem(type, i) {
+  if(type==='skills') skillsData.splice(i, 1);
+  if(type==='langs') langsData.splice(i, 1);
+  if(type==='hobbies') hobbiesData.splice(i, 1);
+  renderListInputs(type);
+  updateCV();
+}
 
 document.getElementById('in-photo').addEventListener('change', function(e) {
   const file = e.target.files[0];
@@ -654,19 +803,33 @@ function changeTemplate(id, lang) {
   updateCV();
 }
 
+function changeCardTemplate(id) {
+  document.querySelectorAll('.card-wrapper').forEach(card => card.classList.remove('active-card'));
+  document.getElementById(`card-tpl-${id}`).classList.add('active-card');
+
+  document.querySelectorAll('#card-templates-section .tpl-card').forEach(c => c.classList.remove('active'));
+  document.getElementById(`card-btn-${id}`).classList.add('active');
+}
+
 function switchView(view, btn) {
+  activeView = view;
   document.querySelectorAll('.v-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  
+  const cardSection = document.getElementById('card-templates-section');
+  
   if(view === 'cv') {
     document.getElementById('scale-wrapper').classList.remove('print-hide', 'm-hide');
     document.getElementById('card-preview').classList.add('print-hide', 'm-hide');
     document.getElementById('card-preview').style.display = 'none';
     document.getElementById('scale-wrapper').style.display = 'flex';
+    cardSection.style.display = 'none';
   } else {
     document.getElementById('scale-wrapper').classList.add('print-hide', 'm-hide');
     document.getElementById('card-preview').classList.remove('print-hide', 'm-hide');
     document.getElementById('card-preview').style.display = 'flex';
     document.getElementById('scale-wrapper').style.display = 'none';
+    cardSection.style.display = 'block';
   }
 }
 
@@ -697,13 +860,12 @@ function updateCV() {
   const email = document.getElementById("in-email").value || "";
   const address = document.getElementById("in-address").value || "";
   const summary = document.getElementById("in-summary").value || "";
-  const skills = document.getElementById("in-skills").value.split(',');
-  const langs = document.getElementById("in-langs").value.split(',');
 
   const labels = dict[currentLang];
   setText('.lbl-contact', labels.contact);
   setText('.lbl-skills', labels.skills);
   setText('.lbl-langs', labels.langs);
+  setText('.lbl-hobbies', labels.hobbies);
   setText('.lbl-profile', labels.profile);
   setText('.lbl-exp', labels.exp);
   setText('.lbl-edu', labels.edu);
@@ -715,22 +877,27 @@ function updateCV() {
   setText('.out-address', address);
   setText('.out-summary', summary);
 
-  let skillsHtmlList = "", skillsHtmlTags = "";
-  skills.forEach(s => { if(s.trim()){ skillsHtmlList += `<li>${s.trim()}</li>`; skillsHtmlTags += `<span>${s.trim()}</span>`; } });
-  setHtml('.out-skills', skillsHtmlList);
-  setHtml('.out-skills-tags', skillsHtmlTags);
-
-  let langsHtmlList = "", langsHtmlTags = "";
-  langs.forEach(s => { if(s.trim()){ langsHtmlList += `<li>${s.trim()}</li>`; langsHtmlTags += `<span>${s.trim()}</span>`; } });
-  setHtml('.out-langs', langsHtmlList);
-  setHtml('.out-langs-tags', langsHtmlTags);
+  for(let i=1; i<=5; i++) {
+    let listHtml = "", tagsHtml = "";
+    skillsData.forEach(s => { if(s.trim()){ listHtml += `<li>${s.trim()}</li>`; tagsHtml += `<span>${s.trim()}</span>`; } });
+    if(document.getElementById(`out-skills-${i}`)) document.getElementById(`out-skills-${i}`).innerHTML = listHtml;
+    
+    let langList = ""; langsData.forEach(l => { if(l.trim()) langList += `<li>${l.trim()}</li>`; });
+    if(document.getElementById(`out-langs-${i}`)) document.getElementById(`out-langs-${i}`).innerHTML = langList;
+    
+    let hobbyList = ""; hobbiesData.forEach(h => { if(h.trim()) hobbyList += `<li>${h.trim()}</li>`; });
+    if(document.getElementById(`out-hobbies-${i}`)) document.getElementById(`out-hobbies-${i}`).innerHTML = hobbyList;
+  }
 
   let expHtml = "";
   expData.forEach(exp => {
+    let companyDetails = exp.company ? `<div class="tl-subtitle">${exp.company}</div>` : "";
+    let subInfo = (exp.address || exp.phone) ? `<div class="tl-company-info"><span><i class="fas fa-map-marker-alt"></i> ${exp.address||''}</span> <span><i class="fas fa-phone"></i> ${exp.phone||''}</span></div>` : "";
     expHtml += `
       <div class="timeline-item">
-        <div class="tl-header"><h4 class="tl-title">${exp.title}</h4><span class="tl-date">${exp.date}</span></div>
-        <div class="tl-subtitle">${exp.subtitle}</div>
+        <div class="tl-header"><h4 class="tl-title">${exp.title}</h4><span class="tl-date" dir="ltr">${exp.start} — ${exp.end}</span></div>
+        ${companyDetails}
+        ${subInfo}
         <p class="tl-desc">${exp.desc}</p>
       </div>`;
   });
@@ -738,21 +905,34 @@ function updateCV() {
 
   let eduHtml = "";
   eduData.forEach(edu => {
+    let compDetails = edu.company ? `<div class="tl-subtitle">${edu.company}</div>` : "";
+    let eduSub = edu.address ? `<div class="tl-company-info"><span><i class="fas fa-map-marker-alt"></i> ${edu.address}</span></div>` : "";
     eduHtml += `
       <div class="timeline-item">
-        <div class="tl-header"><h4 class="tl-title">${edu.title}</h4><span class="tl-date">${edu.date}</span></div>
-        <div class="tl-subtitle">${edu.subtitle}</div>
+        <div class="tl-header"><h4 class="tl-title">${edu.title}</h4><span class="tl-date" dir="ltr">${edu.start} — ${edu.end}</span></div>
+        ${compDetails}
+        ${eduSub}
         <p class="tl-desc">${edu.desc}</p>
       </div>`;
   });
   setHtml('.out-edu', eduHtml);
 
   const qrData = encodeURIComponent(`TEL:${phone}`);
-  document.getElementById("card-qr").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+  document.querySelectorAll(".card-qr-img").forEach(img => {
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+  });
+}
+
+function getActiveElementToExport() {
+    if(activeView === 'cv') {
+        return document.querySelector('.cv-page.active-template');
+    } else {
+        return document.querySelector('.card-wrapper.active-card');
+    }
 }
 
 function exportPDF() {
-  const element = document.querySelector('.cv-page.active-template');
+  const element = getActiveElementToExport();
   const wrapper = document.getElementById('scale-wrapper');
   
   const oldTransform = wrapper.style.transform;
@@ -765,12 +945,14 @@ function exportPDF() {
   const oldText = btn.innerHTML;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإصدار...';
 
+  const fileName = activeView === 'cv' ? 'OLA_CV_Export.pdf' : 'OLA_Business_Card.pdf';
+
   const opt = {
     margin:       0,
-    filename:     'OLA_CV_Export.pdf',
+    filename:     fileName,
     image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
+    jsPDF:        { unit: 'mm', format: activeView === 'cv' ? 'a4' : [85, 55], orientation: activeView === 'cv' ? 'portrait' : 'landscape' }
   };
 
   setTimeout(() => {
@@ -788,7 +970,7 @@ function exportPDF() {
 }
 
 function sharePDF() {
-  const element = document.querySelector('.cv-page.active-template');
+  const element = getActiveElementToExport();
   const wrapper = document.getElementById('scale-wrapper');
   
   const oldTransform = wrapper.style.transform;
@@ -798,14 +980,17 @@ function sharePDF() {
   
   const btn = document.getElementById('btn-share');
   const oldText = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التجهيز للمشاركة...';
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التجهيز...';
 
+  const fileName = activeView === 'cv' ? 'OLA_CV.pdf' : 'OLA_Business_Card.pdf';
+  const shareTitle = activeView === 'cv' ? 'السيرة الذاتية - OLA' : 'بطاقة العمل - OLA';
+  
   const opt = {
     margin:       0,
-    filename:     'OLA_CV.pdf',
+    filename:     fileName,
     image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
+    jsPDF:        { unit: 'mm', format: activeView === 'cv' ? 'a4' : [85, 55], orientation: activeView === 'cv' ? 'portrait' : 'landscape' }
   };
 
   setTimeout(() => {
@@ -814,20 +999,20 @@ function sharePDF() {
         wrapper.style.height = oldHeight;
         btn.innerHTML = oldText;
 
-        const file = new File([pdfBlob], "OLA_CV.pdf", { type: "application/pdf" });
+        const file = new File([pdfBlob], fileName, { type: "application/pdf" });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
             navigator.share({
                 files: [file],
-                title: 'السيرة الذاتية - OLA',
-                text: 'مرحباً، أشارك معك السيرة الذاتية الخاصة بي.'
+                title: shareTitle,
+                text: 'مرحباً، أشارك معك هذا الملف من أنظمة OLA.'
             }).catch(err => console.log("تم إلغاء المشاركة", err));
         } else {
-            alert("متصفحك الحالي لا يدعم المشاركة المباشرة، سيتم حفظ الملف في هاتفك بدلاً من ذلك.");
+            alert("متصفحك الحالي لا يدعم المشاركة المباشرة، سيتم حفظ الملف في هاتفك.");
             const url = URL.createObjectURL(pdfBlob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "OLA_CV.pdf";
+            a.download = fileName;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -841,9 +1026,12 @@ function sharePDF() {
 }
 
 window.onload = () => {
-  renderExpInputs();
   renderEduInputs();
-  const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230a2e6d'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
+  renderExpInputs();
+  renderListInputs('skills');
+  renderListInputs('langs');
+  renderListInputs('hobbies');
+  const defaultImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230a2e6d'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'></path></svg>";
   document.querySelectorAll('.out-photo').forEach(img => img.src = defaultImg);
   updateCV();
 };
